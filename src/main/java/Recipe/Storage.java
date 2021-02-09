@@ -9,13 +9,23 @@ import java.util.Scanner;
  */
 public class Storage {
 
+  private String name;
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
   private HashSet<Ingredient> ingredients = new HashSet<>();
 
   public Ingredient addIngredientToStorage(Scanner input) {
 
     Ingredient newIngredient;
 
-    String name;
+    String ingredientName;
 
     String amountWithUnit;
 
@@ -36,8 +46,8 @@ public class Storage {
     Date expirationDate;
 
     System.out.println("What ingredient would you like to add?");
-    name = input.next();
-    newIngredient = new Ingredient(name);
+    ingredientName = input.next();
+    newIngredient = new Ingredient(ingredientName);
 
     System.out.println("How much/many? (number then unit) To skip, type \"skip.\"");
     input.nextLine();
@@ -50,10 +60,13 @@ public class Storage {
         ++i;
       }
       newIngredient.setAmount(amount);
-      if (i > amountWithUnit.length() + 1) {
+      if (i + 1 < amountWithUnit.length()) {
         unit = amountWithUnit.substring(i + 1);
-        newIngredient.setMeasurement(unit);
       }
+      else {
+        unit = ingredientName;
+      }
+      newIngredient.setMeasurement(unit);
     }
 
     System.out.println("How much did that cost? To skip, type \"skip.\"");
@@ -74,14 +87,19 @@ public class Storage {
     System.out.println("When will it expire? (yyyy mm dd) To skip, type \"skip.\"");
     if (input.hasNextInt()) {
       year = input.nextInt();
-      month = input.nextInt();
-      day = input.nextInt();
-      expirationDate = new Date(year, month, day);
-      newIngredient.setExpirationDate(expirationDate);
+      if (input.hasNextInt()) {
+        month = input.nextInt();
+        if (input.hasNextInt()) {
+          day = input.nextInt();
+          expirationDate = new Date(year, month, day);
+          newIngredient.setExpirationDate(expirationDate);
+        }
+      }
     }
-    input.next();
 
     System.out.println(newIngredient.toString());
+
+    ingredients.add(newIngredient);
 
     return newIngredient;
   }

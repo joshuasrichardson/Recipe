@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 public class IngredientTest {
 
   @Test
@@ -32,7 +34,31 @@ public class IngredientTest {
     assert (milk.getMostRecentStore() == "Walmart");
     assert (milk.getExpirationDate() == expirationDate);
 
-    //System.out.println(milk.toString());
+    System.out.println(milk.toString());
+  }
+
+  @Test
+  public void findIngredientNameTest() {
+    String name = Ingredient.findIngredientName("yummy food 106.1 cartons");
+    assert (name.equals("yummy food"));
+  }
+
+  @Test
+  public void findIngredientNumberTest() {
+    double number = Ingredient.findIngredientNumber("yummy food 15.7 cartons");
+    assert (number == 15.7);
+  }
+
+  @Test
+  public void findIngredientUnitTest() {
+    String name = Ingredient.findIngredientUnit("yummy food 1.7 cartons");
+    assert (name.equals("cartons"));
+  }
+
+  @Test
+  public void findNoIngredientUnitTest() {
+    String name = Ingredient.findIngredientUnit("yummy food 100.3");
+    assert (name.length() == 0);
   }
 
 }

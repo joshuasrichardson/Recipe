@@ -1,6 +1,9 @@
 package Recipe;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.Set;
@@ -26,44 +29,64 @@ public class Server {
    */
   public static void main(String[] args) {
     try {
+
       Scanner input = new Scanner(System.in);
+
+      File file = new File("multipleWordRecipeTestFile");
+
+      if (args.length > 0) {
+        file = new File(args[0]);
+      }
 
       Database recipeDatabase = new Database();
 
-      RecipeBook recipeBook = new RecipeBook();
+      RecipeBook recipeBook = new RecipeBook("Megumi"); //Later add functionality to have different authors.
 
       Storage storage = new Storage();
 
-      int selection = 0;
+      int selection;
 
-      Date i = new Date(2021,2,18);
-      Ingredient ing = new Ingredient("sauce");
-      ing.setExpirationDate(i);
-      System.out.println("date: " + i);
+      recipeDatabase.loadDatabaseDriver();
+      recipeDatabase.openConnection("jdbc:sqlite:recipeTest.sqlite");
+      recipeDatabase.createTables();
 
       Server.showOptions();
       selection = input.nextInt();
       while (selection != 10) {
 
+        if (args.length > 0) {
+          input = new Scanner(file);
+        }
+
         if (selection == 1) {
-          recipeBook.addRecipe(input);
+          Recipe recipe = recipeBook.addRecipe(input);
+          try {
+            recipeDatabase.insertRecipe(recipe, recipeBook);
+            for (int i = 0; i < recipe.getIngredients().size(); ++i) {
+              recipeDatabase.insertRecipeToIngredient(recipe, recipe.getIngredients().get(i));
+            }
+          } catch (SQLException throwables) {
+            throwables.printStackTrace();
+          }
         }
 
         if (selection == 2) {
-          storage.addIngredientToStorage(input);
+          Ingredient ingredient = storage.addIngredientToStorage(input);
+          recipeDatabase.insertIngredient(ingredient, storage);
+        }
+
+        if (args.length > 0) {
+          input = new Scanner(System.in);
         }
 
         Server.showOptions();
         selection = input.nextInt();
       }
 
-      recipeDatabase.loadDatabaseDriver();
-      recipeDatabase.openConnection();
-      recipeDatabase.createTables();
-      //recipeDatabase.insertRecipe(recipe);
       Set<String> names = recipeDatabase.loadRecipes();
       recipeDatabase.closeConnection(true);
 
+      System.out.println(names.toString());
 
       System.out.println("OK");
     }
@@ -75,6 +98,9 @@ public class Server {
     }
     catch (SQLException throwables) {
       throwables.printStackTrace();
+    }
+    catch (FileNotFoundException f) {
+      f.printStackTrace();
     }
   }
 }

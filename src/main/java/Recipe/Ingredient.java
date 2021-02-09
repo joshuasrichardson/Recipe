@@ -37,6 +37,19 @@ public class Ingredient {
   }
 
   /**
+   * constructs an ingredient to be used in a recipe
+   *
+   * @param name
+   * @param amount
+   * @param measurement
+   */
+  public Ingredient(String name, double amount, String measurement) {
+    this.name = name;
+    this.amount = amount;
+    this.measurement = measurement;
+  }
+
+  /**
    * constructs an ingredient with commonly known variables
    *
    * @param name
@@ -99,9 +112,7 @@ public class Ingredient {
     return amount;
   }
 
-  public String getCheapestStore() {
-    return cheapestStore;
-  }
+  public String getCheapestStore() { return cheapestStore; }
 
   public String getMostRecentStore() {
     return mostRecentStore;
@@ -115,9 +126,7 @@ public class Ingredient {
     return expirationDate;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+  public void setName(String name) { this.name = name; }
 
   public void setAveragePrice(double averagePrice) {
     this.averagePrice = averagePrice;
@@ -151,9 +160,60 @@ public class Ingredient {
     this.expirationDate = expirationDate;
   }
 
-  public boolean addIngredient(Scanner input) {
+  public static String findIngredientName(String input) {
+    StringBuilder ingredientName = new StringBuilder();
 
-    return true;
+    for (int i = 0; i < input.length(); ++i) {
+      if (Character.isDigit(input.charAt(i))) {
+        break;
+      }
+      else {
+        ingredientName.append(input.charAt(i));
+      }
+    }
+
+    if (ingredientName.charAt(ingredientName.length() - 1) == ' ') {
+      ingredientName.deleteCharAt(ingredientName.length() - 1);
+    }
+
+    return ingredientName.toString();
+  }
+
+  public static double findIngredientNumber(String input) {
+    StringBuilder ingredientName = new StringBuilder();
+
+    for (int i = 0; i < input.length(); ++i) {
+      if (Character.isDigit(input.charAt(i)) || input.charAt(i) == '.') {
+        ingredientName.append(input.charAt(i));
+      }
+    }
+
+    double number = Double.parseDouble(ingredientName.toString());
+
+    return number;
+  }
+
+  public static String findIngredientUnit(String input) {
+    StringBuilder ingredientName = new StringBuilder();
+
+    int i = 0;
+
+    while (i < input.length() && !Character.isDigit(input.charAt(i))) {
+      ++i;
+    }
+    while (i < input.length() && (Character.isDigit(input.charAt(i)) || input.charAt(i) == '.')) {
+      ++i;
+    }
+    while (i < input.length()) {
+      ingredientName.append(input.charAt(i));
+      ++i;
+    }
+
+    if (ingredientName.length() != 0 && ingredientName.charAt(0) == ' ') {
+      ingredientName.deleteCharAt(0);
+    }
+
+    return ingredientName.toString();
   }
 
   @Override
@@ -162,7 +222,7 @@ public class Ingredient {
             "Name: " + name + '\n' +
             "Average Price: $" + averagePrice + " for " + amount + " " + measurement + '\n' +
             "Sale Price: $" + salePrice + " for " + amount + " " + measurement + '\n' +
-            "Most Recent Price: " + mostRecentPrice + " for " + amount + " " + measurement + '\n' +
+            "Most Recent Price: $" + mostRecentPrice + " for " + amount + " " + measurement + '\n' +
             "Cheapest at " + cheapestStore + '\n' +
             "Expires: " + expirationDate + '\n' +
             '}';

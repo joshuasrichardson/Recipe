@@ -13,7 +13,7 @@ public class Recipe {
 
   private String name;
 
-  private ArrayList<String> ingredients;
+  private ArrayList<Ingredient> ingredients;
 
   /**
    * constructs a recipe with provided name and ingredients that the user can refer to later
@@ -21,7 +21,7 @@ public class Recipe {
    * @param name name of the recipe
    * @param ingredients a list of ingredients that is used in the recipe
    */
-  public Recipe(String name, ArrayList<String> ingredients) {
+  public Recipe(String name, ArrayList<Ingredient> ingredients) {
     this.name = name;
     this.ingredients = new ArrayList<>(ingredients);
   }
@@ -30,16 +30,20 @@ public class Recipe {
     return id;
   }
 
-  public void setId(int id) {
-    this.id = id;
-  }
-
   public String getName() {
     return name;
   }
 
+  public void setId(int id) {
+    this.id = id;
+  }
+
   public void setName(String name) {
     this.name = name;
+  }
+
+  public ArrayList<Ingredient> getIngredients() {
+    return ingredients;
   }
 
   @Override

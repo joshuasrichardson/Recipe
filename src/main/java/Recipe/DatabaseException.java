@@ -5,7 +5,7 @@ public class DatabaseException extends Exception {
     super("There was a problem with the database");
   }
 
-  DatabaseException(String message) {
+  public DatabaseException(String message) {
     super(message);
   }
 }
