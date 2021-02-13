@@ -1,7 +1,7 @@
 package Recipe;
 
-import java.io.InputStream;
-import java.sql.*;
+import Ingredient.Ingredient;
+
 import java.util.*;
 
 /**

@@ -1,6 +1,7 @@
 package Recipe;
 
-import java.sql.SQLException;
+import Ingredient.Ingredient;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 

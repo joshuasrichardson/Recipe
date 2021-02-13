@@ -1,4 +1,4 @@
-package Recipe;
+package Database;
 
 public class DatabaseException extends Exception {
   DatabaseException() {

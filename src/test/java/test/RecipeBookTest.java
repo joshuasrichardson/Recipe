@@ -1,6 +1,5 @@
 package test;
 
-import Recipe.Ingredient;
 import Recipe.Recipe;
 import Recipe.RecipeBook;
 import org.junit.jupiter.api.Test;
@@ -22,10 +21,11 @@ public class RecipeBookTest {
   @Test
   public void addRecipeTest() {
     try {
-      testFile = new File("multipleWordRecipeTestFile");
+      testFile = new File("addRecipeTest");
       fileInput = new Scanner(testFile);
+      fileInput.nextLine();
       recipe = recipeBook.addRecipe(fileInput);
-      assert ("Grandma's Famous Cookies".equals(recipe.getName()));
+      assert ("Chocolate Chip Cookies".equals(recipe.getName()));
 
     } catch (FileNotFoundException e) {
       e.printStackTrace();

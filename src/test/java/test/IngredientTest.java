@@ -1,6 +1,6 @@
 package test;
 
-import Recipe.Ingredient;
+import Ingredient.Ingredient;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;

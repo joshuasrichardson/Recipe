@@ -1,5 +1,6 @@
-package Recipe;
+package Ingredient;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -10,22 +11,18 @@ import java.util.Scanner;
  */
 public class Ingredient {
   private String name;
-
   private double averagePrice;
-
   private double salePrice;
-
   private double mostRecentPrice;
-
   private double amount;
-
   private String measurement;
-
   private String cheapestStore;
-
   private String mostRecentStore;
-
   private Date expirationDate;
+  private String brand;
+  private String city;
+  private String foodGroup;
+  private ArrayList<String> allergens;
 
   /**
    * constructs a new ingredient with only a name
@@ -126,6 +123,14 @@ public class Ingredient {
     return expirationDate;
   }
 
+  public String getBrand() { return brand; }
+
+  public String getCity() { return city; }
+
+  public String getFoodGroup() { return foodGroup; }
+
+  public ArrayList<String> getAllergens() { return allergens; }
+
   public void setName(String name) { this.name = name; }
 
   public void setAveragePrice(double averagePrice) {
@@ -160,6 +165,14 @@ public class Ingredient {
     this.expirationDate = expirationDate;
   }
 
+  public void setBrand(String brand) { this.brand = brand; }
+
+  public void setCity(String city) { this.city = city; }
+
+  public void setFoodGroup(String foodGroup) { this.foodGroup = foodGroup; }
+
+  public void setAllergens(ArrayList<String> allergens) { this.allergens = allergens; }
+
   public static String findIngredientName(String input) {
     StringBuilder ingredientName = new StringBuilder();
 
@@ -172,7 +185,7 @@ public class Ingredient {
       }
     }
 
-    if (ingredientName.charAt(ingredientName.length() - 1) == ' ') {
+    if (ingredientName.length() > 0 && ingredientName.charAt(ingredientName.length() - 1) == ' ') {
       ingredientName.deleteCharAt(ingredientName.length() - 1);
     }
 

@@ -1,8 +1,11 @@
-package Recipe;
+package Database;
+
+import Ingredient.*;
+import Recipe.*;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -89,7 +92,6 @@ public class Database {
       sql.deleteCharAt(sql.length() - 1);
       sql.deleteCharAt(sql.length() - 1);
       sql.append(')');
-      //System.out.println(sql.toString());
       stmt = connection.prepareStatement(sql.toString());
       stmt.execute();
     }
@@ -101,9 +103,9 @@ public class Database {
   }
 
   /**
-   * creates all tables needed in the database for this program if they are not already made
+   * creates all tables needed in the database for this program if they are not already made.
    *
-   * @throws SQLException
+   * @throws SQLException if there is a problem in the SQL syntax or something similar to that.
    */
   public void createTables() throws SQLException {
     createTable("recipes", "name", "varchar(255)",
@@ -111,9 +113,34 @@ public class Database {
     createTable("recipeBooks", "author", "varchar(255)");
     createTable("ingredient", "name", "varchar(255)",
             "storageContainer varchar(255)", "averagePrice integer","salePrice integer",
-            "mostRecentPrice integer", "amount integer", "measurement varchar(32)", "expirationDate varchar(255)");
+            "mostRecentPrice integer", "amount integer", "measurement varchar(32)", "expirationDate varchar(255)",
+            "brand varchar(255)", "foodGroup varchar(255)", "city varchar(255)");
     createTable("recipeToIngredients", "id", "integer",
             "recipeName varchar(255)", "ingredientName varchar(255)", "amount double", "units varchar(255)");
+  }
+
+  /**
+   * adds a column into an existing table.
+   * @param input the input from the keyboard or file with information about which table and column to update
+   */
+  public void addColumnToTable(Scanner input) throws SQLException {
+    input.nextLine();
+    System.out.println("Enter the name of the table to add to:");
+    String tableName = input.nextLine();
+    System.out.println("Enter the name of the column to add:");
+    String columnName = input.nextLine();
+    System.out.println("Enter the type of the column:");
+    String columnType = input.nextLine();
+    PreparedStatement stmt = null;
+    try {
+      String sql = "ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " " +  columnType;
+      stmt = connection.prepareStatement(sql);
+      stmt.execute();
+    } finally {
+      if (stmt != null) {
+        stmt.close();
+      }
+    }
   }
 
   /**
@@ -157,8 +184,8 @@ public class Database {
   public boolean insertIngredient(Ingredient ingredient, Storage storage) throws SQLException {
     PreparedStatement stmt = null;
     try {
-      String sql = "insert into ingredient (name, storageContainer, mostRecentPrice, amount, measurement, expirationDate) " +
-              "values (?, ?, ?, ?, ?, ?)";
+      String sql = "insert into ingredient (name, storageContainer, mostRecentPrice, amount, measurement, expirationDate," +
+              "brand, foodGroup, city) values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
       stmt = connection.prepareStatement(sql);
       stmt.setString(1, ingredient.getName());
@@ -167,6 +194,9 @@ public class Database {
       stmt.setDouble(4, ingredient.getAmount());
       stmt.setString(5, ingredient.getMeasurement());
       stmt.setString(6, ingredient.getExpirationDate().toString());
+      stmt.setString(7, ingredient.getBrand());
+      stmt.setString(8, ingredient.getFoodGroup());
+      stmt.setString(9, ingredient.getCity());
 
       int rowsAffected = stmt.executeUpdate();
       if (rowsAffected == 1) {
