@@ -1,11 +1,15 @@
 package Main;
 
 import Database.*;
+import Handler.*;
 import Ingredient.*;
 import Recipe.*;
+import com.sun.net.httpserver.HttpServer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.Set;
@@ -15,120 +19,46 @@ import java.util.Set;
  */
 public class Server {
 
-  /**
-   * finds a name out of the first commandline argument to assign as the author of the recipe book
-   * and owner of the storage container.
-   */
-  public static String findUsername(String arg0) {
-    return arg0.substring(arg0.lastIndexOf(':') + 1, arg0.indexOf('.'));
-  }
+    private static final int MAX_WAITING_CONNECTIONS = 12;
 
-  /**
-   * displays what the user can do with this program
-   */
-  public static void showOptions() {
-    System.out.println("What would you like to do?");
-    System.out.println("1. Add a recipe to your recipe book");
-    System.out.println("2. Add an ingredient to your inventory");
-    System.out.println("9. Add a new column to a table");
-    System.out.println("10. Quit");
-  }
+    private HttpServer server;
 
-  /**
-   * allows the user to go through their recipes and ingredients to help them decide what to make and how to budget
-   * @param args the database to save to (required) and the file to read in (optional)
-   */
-  public static void main(String[] args) {
-    try {
+    public void run(String portNumber) {
 
-      String user = "Default";
+      System.out.println("Initializing HTTP Server");
 
-      if (args.length == 0) {
-        throw new ArgumentException("Add a database to the input arguments.");
-      }
-      else {
-        user = findUsername(args[0]);
+      try {
+        server = HttpServer.create(
+                new InetSocketAddress(Integer.parseInt(portNumber)),
+                MAX_WAITING_CONNECTIONS);
+      } catch (IOException e) {
+        e.printStackTrace();
+        return;
       }
 
-      Scanner input = new Scanner(System.in);
+      server.setExecutor(null);
 
-      File file = new File("addIngredientTest");
+      System.out.println("Creating contexts");
 
-      if (args.length > 1) {
-        file = new File(args[1]);
-      }
+      server.createContext("/user/register", new RegisterHandler());
 
-      Database recipeDatabase = new Database();
+      server.createContext("/user/login", new LoginHandler());
 
-      RecipeBook recipeBook = new RecipeBook();
+      server.createContext("/clear", new ClearHandler());
 
-      Storage storage = new Storage();
+      server.createContext("/fill", new FillHandler());
 
-      recipeBook.setAuthor(user);
+      server.createContext("/recipes", new RecipeHandler());
 
-      storage.setName(user);
+      server.createContext("/ingredients", new IngredientHandler());
 
-      int selection;
+      server.createContext("/", new DefaultHandler());
 
-      recipeDatabase.loadDatabaseDriver();
-      recipeDatabase.openConnection(args[0]);
-      recipeDatabase.createTables();
+      System.out.println("Starting server");
 
-      if (args.length > 1) {
-        input = new Scanner(file);
-      }
+      server.start();
 
-      Server.showOptions();
-      selection = input.nextInt();
-      input.nextLine();
-      while (selection != 10) {
-
-        if (selection == 1) {
-          Recipe recipe = recipeBook.addRecipe(input);
-          try {
-            recipeDatabase.insertRecipe(recipe, recipeBook);
-            for (int i = 0; i < recipe.getIngredients().size(); ++i) {
-              recipeDatabase.insertRecipeToIngredient(recipe, recipe.getIngredients().get(i));
-            }
-          } catch (SQLException throwables) {
-            throwables.printStackTrace();
-          }
-        }
-
-        if (selection == 2) {
-          Ingredient ingredient = storage.addIngredientToStorage(input);
-          recipeDatabase.insertIngredient(ingredient, storage);
-        }
-
-        if (selection == 9) {
-          recipeDatabase.addColumnToTable(input);
-        }
-
-        Server.showOptions();
-        selection = input.nextInt();
-      }
-
-      Set<String> names = recipeDatabase.loadRecipes();
-      recipeDatabase.closeConnection(true);
-
-      System.out.println(names.toString());
-
-      System.out.println("OK");
+      System.out.println("Server started");
     }
-    catch (DatabaseException e) {
-      e.printStackTrace();
-    }
-    catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    }
-    catch (SQLException throwables) {
-      throwables.printStackTrace();
-    }
-    catch (FileNotFoundException f) {
-      f.printStackTrace();
-    }
-    catch (ArgumentException dbProblem) {
-      dbProblem.getMessage();
-    }
-  }
+
 }

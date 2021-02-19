@@ -11,11 +11,13 @@ import java.util.Scanner;
  */
 public class Ingredient {
   private String name;
-  private double averagePrice;
-  private double salePrice;
-  private double mostRecentPrice;
-  private double amount;
+  private double averagePrice = -1;
+  private double salePrice = -1;
+  private double mostRecentPrice = -1;
+  private double amount = -1;
   private String measurement;
+  private int number = -1;
+  private String container;
   private String cheapestStore;
   private String mostRecentStore;
   private Date expirationDate;
@@ -23,6 +25,8 @@ public class Ingredient {
   private String city;
   private String foodGroup;
   private ArrayList<String> allergens;
+
+  public Ingredient() {}
 
   /**
    * constructs a new ingredient with only a name
@@ -67,26 +71,27 @@ public class Ingredient {
    * constructs an ingredient with many variables
    *
    * @param name
-   * @param averagePrice
-   * @param salePrice
    * @param mostRecentPrice
    * @param amount
    * @param measurement
-   * @param cheapestStore
    * @param mostRecentStore
    * @param expirationDate
    */
-  public Ingredient(String name, double averagePrice, double salePrice, double mostRecentPrice,
-                    double amount, String measurement, String cheapestStore, String mostRecentStore, Date expirationDate) {
+  public Ingredient(String name, double mostRecentPrice, double amount, String measurement, int number, String container,
+                    String mostRecentStore, Date expirationDate, String brand, String city, String foodGroup,
+                    ArrayList<String> allergens) {
     this.name = name;
-    this.averagePrice = averagePrice;
-    this.salePrice = salePrice;
     this.mostRecentPrice = mostRecentPrice;
     this.amount = amount;
     this.measurement = measurement;
-    this.cheapestStore = cheapestStore;
+    this.number = number;
+    this.container = container;
     this.expirationDate = expirationDate;
     this.mostRecentStore = mostRecentStore;
+    this.brand = brand;
+    this.city = city;
+    this.foodGroup = foodGroup;
+    this.allergens = allergens;
   }
 
   public String getName() {
@@ -118,6 +123,10 @@ public class Ingredient {
   public String getMeasurement() {
     return measurement;
   }
+
+  public int getNumber() { return number; }
+
+  public String getContainer() { return container; }
 
   public Date getExpirationDate() {
     return expirationDate;
@@ -172,6 +181,10 @@ public class Ingredient {
   public void setFoodGroup(String foodGroup) { this.foodGroup = foodGroup; }
 
   public void setAllergens(ArrayList<String> allergens) { this.allergens = allergens; }
+
+  public void setNumber(int number) { this.number = number; }
+
+  public void setContainer(String container) { this.container = container; }
 
   public static String findIngredientName(String input) {
     StringBuilder ingredientName = new StringBuilder();
