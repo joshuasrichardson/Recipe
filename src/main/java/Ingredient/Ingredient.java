@@ -2,7 +2,6 @@ package Ingredient;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Scanner;
 
 /**
  * stores information about ingredients including their name, average price, sale price, most recent price,
@@ -10,12 +9,13 @@ import java.util.Scanner;
  * good price.
  */
 public class Ingredient {
+  private int ingredientID;
   private String name;
   private double averagePrice = -1;
   private double salePrice = -1;
   private double mostRecentPrice = -1;
   private double amount = -1;
-  private String measurement;
+  private String unit;
   private int number = -1;
   private String container;
   private String cheapestStore;
@@ -42,12 +42,12 @@ public class Ingredient {
    *
    * @param name
    * @param amount
-   * @param measurement
+   * @param unit
    */
-  public Ingredient(String name, double amount, String measurement) {
+  public Ingredient(String name, double amount, String unit) {
     this.name = name;
     this.amount = amount;
-    this.measurement = measurement;
+    this.unit = unit;
   }
 
   /**
@@ -56,14 +56,14 @@ public class Ingredient {
    * @param name
    * @param mostRecentPrice
    * @param amount
-   * @param measurement
+   * @param unit
    * @param expirationDate
    */
-  public Ingredient(String name, double mostRecentPrice, double amount, String measurement, Date expirationDate) {
+  public Ingredient(String name, double mostRecentPrice, double amount, String unit, Date expirationDate) {
     this.name = name;
     this.mostRecentPrice = mostRecentPrice;
     this.amount = amount;
-    this.measurement = measurement;
+    this.unit = unit;
     this.expirationDate = expirationDate;
   }
 
@@ -73,17 +73,17 @@ public class Ingredient {
    * @param name
    * @param mostRecentPrice
    * @param amount
-   * @param measurement
+   * @param unit
    * @param mostRecentStore
    * @param expirationDate
    */
-  public Ingredient(String name, double mostRecentPrice, double amount, String measurement, int number, String container,
+  public Ingredient(String name, double mostRecentPrice, double amount, String unit, int number, String container,
                     String mostRecentStore, Date expirationDate, String brand, String city, String foodGroup,
                     ArrayList<String> allergens) {
     this.name = name;
     this.mostRecentPrice = mostRecentPrice;
     this.amount = amount;
-    this.measurement = measurement;
+    this.unit = unit;
     this.number = number;
     this.container = container;
     this.expirationDate = expirationDate;
@@ -93,6 +93,8 @@ public class Ingredient {
     this.foodGroup = foodGroup;
     this.allergens = allergens;
   }
+
+  public int getIngredientID() { return ingredientID; }
 
   public String getName() {
     return name;
@@ -120,8 +122,8 @@ public class Ingredient {
     return mostRecentStore;
   }
 
-  public String getMeasurement() {
-    return measurement;
+  public String getUnit() {
+    return unit;
   }
 
   public int getNumber() { return number; }
@@ -139,6 +141,8 @@ public class Ingredient {
   public String getFoodGroup() { return foodGroup; }
 
   public ArrayList<String> getAllergens() { return allergens; }
+
+  public void setIngredientID(int ingredientID) { this.ingredientID = ingredientID; }
 
   public void setName(String name) { this.name = name; }
 
@@ -158,8 +162,8 @@ public class Ingredient {
     this.amount = amount;
   }
 
-  public void setMeasurement(String measurement) {
-    this.measurement = measurement;
+  public void setUnit(String unit) {
+    this.unit = unit;
   }
 
   public void setCheapestStore(String cheapestStore) {
@@ -246,9 +250,9 @@ public class Ingredient {
   public String toString() {
     return "Ingredient{" +
             "Name: " + name + '\n' +
-            "Average Price: $" + averagePrice + " for " + amount + " " + measurement + '\n' +
-            "Sale Price: $" + salePrice + " for " + amount + " " + measurement + '\n' +
-            "Most Recent Price: $" + mostRecentPrice + " for " + amount + " " + measurement + '\n' +
+            "Average Price: $" + averagePrice + " for " + amount + " " + unit + '\n' +
+            "Sale Price: $" + salePrice + " for " + amount + " " + unit + '\n' +
+            "Most Recent Price: $" + mostRecentPrice + " for " + amount + " " + unit + '\n' +
             "Cheapest at " + cheapestStore + '\n' +
             "Expires: " + expirationDate + '\n' +
             '}';

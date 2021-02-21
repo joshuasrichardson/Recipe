@@ -1,6 +1,6 @@
 package Main;
 
-import Database.Database;
+import Database.*;
 import Ingredient.Ingredient;
 import Ingredient.Storage;
 import Recipe.Recipe;
@@ -69,6 +69,8 @@ public class Main {
       recipeDatabase.openConnection("jdbc:sqlite:" + args[0] + ".sqlite");
       recipeDatabase.createTables();
 
+      IngredientDAO ingredientDAO = new IngredientDAO(recipeDatabase.getConnection("jdbc:sqlite:" + args[0] + ".sqlite"));
+
       if (args.length > 1) {
         input = new Scanner(file);
       }
@@ -92,7 +94,7 @@ public class Main {
 
         if (selection == 2) {
           Ingredient ingredient = storage.addIngredientToStorage(input);
-          recipeDatabase.insertIngredient(ingredient, storage);
+          ingredientDAO.addIngredientToTable(ingredient, storage);
         }
 
         if (selection == 9) {

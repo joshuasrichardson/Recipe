@@ -2,7 +2,6 @@ package IngredientTest;
 
 import Ingredient.Ingredient;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,7 +25,7 @@ public class IngredientTest {
             () -> assertEquals ("milk", milk.getName()),
             () -> assertEquals (1.98, milk.getMostRecentPrice()),
             () -> assertEquals (1, milk.getAmount()),
-            () -> assertEquals ("gallon", milk.getMeasurement()),
+            () -> assertEquals ("gallon", milk.getUnit()),
             () -> assertEquals (1, milk.getNumber()),
             () -> assertEquals ("carton", milk.getContainer()),
             () -> assertEquals ("Walmart", milk.getMostRecentStore()),

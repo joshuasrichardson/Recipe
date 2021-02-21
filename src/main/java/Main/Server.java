@@ -1,18 +1,10 @@
 package Main;
 
-import Database.*;
 import Handler.*;
-import Ingredient.*;
-import Recipe.*;
-import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.sql.SQLException;
-import java.util.Scanner;
-import java.util.Set;
+import java.io.*;
+import java.net.*;
 
 /**
  * interacts with the user to add and retrieve recipes and ingredients
@@ -42,13 +34,13 @@ public class Server {
 
       server.createContext("/user/register", new RegisterHandler());
 
-      server.createContext("/user/login", new LoginHandler());
+      /*server.createContext("/user/login", new LoginHandler());
 
       server.createContext("/clear", new ClearHandler());
 
       server.createContext("/fill", new FillHandler());
 
-      server.createContext("/recipes", new RecipeHandler());
+      server.createContext("/recipes", new RecipeHandler());*/
 
       server.createContext("/ingredients", new IngredientHandler());
 

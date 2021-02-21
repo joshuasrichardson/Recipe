@@ -15,6 +15,14 @@ public class Database {
 
   private Connection connection;
 
+  public Database() {
+
+  }
+
+  public Database(Connection connection) {
+    this.connection = connection;
+  }
+
   /**
    * loads the database driver
    *
@@ -32,13 +40,23 @@ public class Database {
   /**
    * connects to the database
    */
-  public void openConnection(String connectionURL) {
-    try {
-      final String CONNECTION_URL = connectionURL;
-      connection = DriverManager.getConnection(CONNECTION_URL);
-      connection.setAutoCommit(false);
-    } catch (SQLException e) {
-      e.printStackTrace();
+  public Connection openConnection(String connectionURL) throws SQLException {
+    final String CONNECTION_URL = connectionURL;
+    connection = DriverManager.getConnection(CONNECTION_URL);
+    connection.setAutoCommit(false);
+    return connection;
+  }
+
+  /**
+   * gets a connection to the database if open, and if it's not open, it opens one.
+   * @return the connection to the database
+   */
+  public Connection getConnection(String connectionURL) throws SQLException {
+    if(connection == null) {
+      return openConnection(connectionURL);
+    }
+    else {
+      return connection;
     }
   }
 
@@ -47,19 +65,15 @@ public class Database {
    *
    * @param commit tells whether or not to commit all the changes to the database
    */
-  public void closeConnection(boolean commit) {
-    try {
-      if (commit) {
-        connection.commit();
-      } else {
-        connection.rollback();
-      }
-
-      connection.close();
-      connection = null;
-    } catch (SQLException e) {
-      e.printStackTrace();
+  public void closeConnection(boolean commit) throws SQLException {
+    if (commit) {
+      connection.commit();
+    } else {
+      connection.rollback();
     }
+
+    connection.close();
+    connection = null;
   }
 
   /**
@@ -75,7 +89,9 @@ public class Database {
     PreparedStatement stmt = null;
     try {
       StringBuilder sql = new StringBuilder("create table if not exists " + tableName + " (" +
-              primaryKey + " " + primaryKeyType + " not null primary key, ");
+              primaryKey + " " + primaryKeyType + " not null primary key");
+      if (primaryKeyType.equals("integer")) sql.append(" autoincrement");
+      sql.append(", ");
       for (String string : columnsAndTypes) {
         sql.append(string + ", ");
       }
@@ -99,12 +115,14 @@ public class Database {
       createTable("recipes", "name", "varchar(255)",
               "recipeBookAuthor varchar(255)");
       createTable("recipeBooks", "author", "varchar(255)");
-      createTable("ingredient", "name", "varchar(255)",
-              "storageContainer varchar(255)", "averagePrice integer", "salePrice integer",
-              "mostRecentPrice integer", "amount integer", "measurement varchar(32)", "expirationDate varchar(255)",
-              "brand varchar(255)", "foodGroup varchar(255)", "city varchar(255)");
+      createTable("ingredient", "ingredientID", "integer",
+              "name varchar(255)", "storageContainer varchar(255)", "averagePrice integer",
+              "salePrice integer", "mostRecentPrice integer", "amount integer", "measurement varchar(32)",
+              "expirationDate varchar(255)", "brand varchar(255)", "foodGroup varchar(255)", "city varchar(255)");
       createTable("recipeToIngredients", "id", "integer",
               "recipeName varchar(255)", "ingredientName varchar(255)", "amount double", "units varchar(255)");
+      createTable("AuthTokens", "authToken", "varchar(255)",
+              "userID varchar(255)");
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -166,44 +184,6 @@ public class Database {
   }
 
   /**
-   * adds an ingredient to the ingredient table.
-   *
-   * @param ingredient the ingredient to add.
-   * @param storage    the container that holds the ingredient (name of person or type of container like fridge).
-   * @return whether it was able to enter.
-   * @throws SQLException if it already exists.
-   */
-  public boolean insertIngredient(Ingredient ingredient, Storage storage) throws SQLException {
-    PreparedStatement stmt = null;
-    try {
-      String sql = "insert into ingredient (name, storageContainer, mostRecentPrice, amount, measurement, expirationDate," +
-              "brand, foodGroup, city) values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-      stmt = connection.prepareStatement(sql);
-      stmt.setString(1, ingredient.getName());
-      stmt.setString(2, storage.getName());
-      stmt.setDouble(3, ingredient.getMostRecentPrice());
-      stmt.setDouble(4, ingredient.getAmount());
-      stmt.setString(5, ingredient.getMeasurement());
-      stmt.setString(6, ingredient.getExpirationDate().toString());
-      stmt.setString(7, ingredient.getBrand());
-      stmt.setString(8, ingredient.getFoodGroup());
-      stmt.setString(9, ingredient.getCity());
-
-      int rowsAffected = stmt.executeUpdate();
-      if (rowsAffected == 1) {
-        return true;
-      } else {
-        return false;
-      }
-    } finally {
-      if (stmt != null) {
-        stmt.close();
-      }
-    }
-  }
-
-  /**
    * inserts a recipe and an ingredient that go together.
    *
    * @param recipe     the recipe that uses the ingredient.
@@ -220,7 +200,7 @@ public class Database {
       stmt.setString(1, recipe.getName());
       stmt.setString(2, ingredient.getName());
       stmt.setDouble(3, ingredient.getAmount());
-      stmt.setString(4, ingredient.getMeasurement());
+      stmt.setString(4, ingredient.getUnit());
 
       int rowsAffected = stmt.executeUpdate();
       if (rowsAffected == 1) {
@@ -322,7 +302,7 @@ public class Database {
         double amount = keyRS.getDouble(6);
         ingredient.setAmount(amount);
         String measurement = keyRS.getString(7);
-        ingredient.setMeasurement(measurement);
+        ingredient.setUnit(measurement);
         int number = keyRS.getInt(12);
         ingredient.setNumber(number);
         String container = keyRS.getString(13);

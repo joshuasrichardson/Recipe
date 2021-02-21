@@ -7,11 +7,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 
 public class DefaultHandler implements HttpHandler {
   @Override
-  public void handle(HttpExchange exchange) throws IOException {
+  public void handle(HttpExchange exchange) {
     boolean success = false;
 
     try {
@@ -22,6 +23,8 @@ public class DefaultHandler implements HttpHandler {
           urlPath = "/index.html";
         }
 
+        if (urlPath.contains("..")) throw new AccessDeniedException("You cannot access those filesだよ！");
+
         String filePath = "web" + urlPath;
 
         File file = new File(filePath);
@@ -31,9 +34,13 @@ public class DefaultHandler implements HttpHandler {
           OutputStream respBody = exchange.getResponseBody();
           Files.copy(file.toPath(), respBody);
           respBody.flush();
+          respBody.close();
+
+          success = true;
         }
-        else {
-          exchange.sendResponseHeaders(HttpURLConnection.HTTP_NOT_FOUND, 0);
+        if (!success) {
+          exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+          exchange.getResponseBody().close();
         }
       }
       else {

@@ -6,7 +6,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title> Recipe and Storage App </title>
   <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -22,7 +22,7 @@
       var authtoken = document.getElementById("authtoken").value;
 
       var method = "post";
-      if (handle.includes("recipes") || handle.includes("ingredients")) {
+      if ((handle.includes("recipes") || handle.includes("ingredients")) && !handle.includes("add")) {
         method = "get";
       }
 
@@ -127,6 +127,11 @@
       document.getElementById("handleBox").value = api;
       document.getElementById("requestBox").value = "";
     }
+    function addIngredient() {
+      window.scrollTo(0, document.body.scrollHeight);
+      document.getElementById("handleBox").value = "/ingredients/add";
+      document.getElementById("requestBox").value = formatJson("{\"ingredientName\":\"name\",\"mostRecentPrice\":\"mostRecentPrice\",\"number\":\"1\",\"container\":\"box\",\"amount\":\"1\",\"unit\":\"ounces\",\"expirationDate\":\"2021 12 31\",\"brand\":\"Kroger\",\"foodGroup\":\"vegetable\",\"mostRecentStore\":\"Smith's\",\"city\":\"Provo\",\"allergens\":[]}");
+    }
   </script>
 </head>
 
@@ -214,6 +219,10 @@
           ingredient with the specified name. The ingredient must belong to the user associated
           with the authorization authtoken. The returned JSON contains the requested ingredient object.
           Authorization authtoken is required.
+        </li>
+        <li>
+          <a href="javascript:addIngredient()">/ingredients/add</a> This API will allow a user to add an ingredient with
+          all the relevant information into their virtual storage.
         </li>
         <li>
           <a href="javascript:getAllRecipes()">/recipes</a> This API will return ALL recipes

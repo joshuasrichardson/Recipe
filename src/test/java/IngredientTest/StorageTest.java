@@ -32,7 +32,7 @@ public class StorageTest {
       ingredient = storage.addIngredientToStorage(fileInput);
       assertEquals ("vanilla yogurt", ingredient.getName());
       assertEquals (32, ingredient.getAmount());
-      assertEquals ("ounces", ingredient.getMeasurement());
+      assertEquals ("ounces", ingredient.getUnit());
       assertEquals (new Date(2021,2,19), ingredient.getExpirationDate());
       assertEquals (1.84, ingredient.getMostRecentPrice());
       assertEquals ("Walmart", ingredient.getMostRecentStore());

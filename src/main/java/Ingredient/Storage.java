@@ -1,7 +1,5 @@
 package Ingredient;
 
-import Ingredient.Ingredient;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -23,6 +21,14 @@ public class Storage {
   }
 
   private HashSet<Ingredient> ingredients = new HashSet<>();
+
+  public Storage() {
+
+  }
+
+  public Storage(String name) {
+    this.name = name;
+  }
 
   public Ingredient addIngredientToStorage(Scanner input) {
 
@@ -62,7 +68,7 @@ public class Storage {
     else {
       unit = ingredientName;
     }
-    newIngredient.setMeasurement(unit);
+    newIngredient.setUnit(unit);
 
     System.out.println("How much did that cost?");
     if (input.hasNextDouble()) {

@@ -19,7 +19,11 @@ public class DatabaseTest {
   @BeforeEach
   public void connect() {
     database = new Database();
-    database.openConnection("jdbc:sqlite:recipeTest.sqlite");
+    try {
+      database.openConnection("jdbc:sqlite:recipeTest.sqlite");
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+    }
   }
 
   @Test
@@ -52,7 +56,11 @@ public class DatabaseTest {
 
   @AfterEach
   public void disconnect() {
-    database.closeConnection(false);
+    try {
+      database.closeConnection(false);
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+    }
   }
 
 }
