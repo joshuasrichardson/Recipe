@@ -4,6 +4,7 @@ import Ingredient.*;
 import Recipe.*;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -268,15 +269,66 @@ public class Database {
    * @return
    */
   public ResultSet selectFromTable(String table, String column, Object value) throws SQLException {
-    String sql = "select * from " + table + " where " + column + " = \'" + value + "\';";
+    String sql = "SELECT * FROM " + table + " WHERE " + column + " = \'" + value + "\';";
     Statement keyStmt = connection.createStatement();
     return keyStmt.executeQuery(sql);
   }
 
-  //FIXME:: Find the date in the string and make it into a date type
-  private Date parseDate(String dateString) {
-    System.out.println(dateString);
-    return new Date(2021, 02, 21);
+  /**
+   * selects items from the tables (first part of the strings), where the columns (second part of the strings)
+   * equal the corresponding values (third part of string). Separate each part with a comma
+   * (part 1,part 2,part 3).
+   * @param tablesColumnsValues the tables, columns, and values to use in the select function.
+   * @return a result set with the matching items.
+   * @throws SQLException
+   */
+  public ResultSet selectUsingMultipleColumns(String... tablesColumnsValues) throws SQLException {
+    ArrayList<String> tables = new ArrayList<>();
+    ArrayList<String> columns = new ArrayList<>();
+    ArrayList<String> values = new ArrayList<>();
+    for (String tableColumnValue : tablesColumnsValues) {
+      tables.add(findTable(tableColumnValue));
+      columns.add(findColumn(tableColumnValue));
+      values.add(findValue(tableColumnValue));
+    }
+    StringBuilder sql = new StringBuilder("SELECT * FROM ");
+    for (int i = 0; i < tables.size(); ++i) {
+      boolean sameTable = false;
+      for (int j = 0; j < i; ++j) {
+        if (tables.get(i).equals(tables.get(j))) {
+          sameTable = true;
+        }
+      }
+      if (!sameTable) sql.append(tables.get(i) + ", ");
+    }
+    sql.deleteCharAt(sql.length() - 2);
+    sql.append("\nWHERE ");
+    for (int i = 0; i < columns.size(); ++i) {
+      if (i > 0) sql.append(" AND ");
+      sql.append(columns.get(i) + " = \'" + values.get(i) + "\'");
+    }
+    Statement keyStmt = connection.createStatement();
+    return keyStmt.executeQuery(sql.toString());
+  }
+
+  private String findTable(String tableColumnValue) {
+    StringBuilder table = new StringBuilder(tableColumnValue);
+    table.delete(table.indexOf(","), table.length());
+    return table.toString();
+  }
+
+  private String findColumn(String tableColumnValue) {
+    StringBuilder column = new StringBuilder(tableColumnValue);
+    column.delete(0, column.indexOf(",") + 1);
+    column.delete(column.indexOf(","), column.length());
+    return column.toString();
+  }
+
+  private String findValue(String tableColumnValue) {
+    StringBuilder value = new StringBuilder(tableColumnValue);
+    value.delete(0, value.indexOf(",") + 1);
+    value.delete(0, value.indexOf(",") + 1);
+    return value.toString();
   }
 
   /**

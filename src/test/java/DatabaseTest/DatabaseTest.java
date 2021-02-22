@@ -65,4 +65,24 @@ public class DatabaseTest {
     //assertEquals(1.59, ingredient.getAveragePrice());*/
   }
 
+  /*
+  @Test
+  public void findTableTest() {
+    String table = new Database().findTable("table,column,value");
+    assertEquals("table", table);
+  }
+
+  @Test
+  public void findColumnTest() {
+    String column = new Database().findColumn("table,column,value");
+    assertEquals("column", column);
+  }
+
+  @Test
+  public void findValueTest() {
+    String value = new Database().findValue("table,column,value");
+    assertEquals("value", value);
+  }
+   */
+
 }

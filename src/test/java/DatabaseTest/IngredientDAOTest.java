@@ -73,10 +73,10 @@ public class IngredientDAOTest {
   public void addIngredientToInventoryTableTest() {
     Ingredient ingredient = new Ingredient("butter", "Kirkland", "Joshua",
             "fridge",    2.00, 1, "package", 1.00,
-            "pound", LocalDate.now());
+            "pound", LocalDate.now(), LocalDate.now());
     Ingredient ingredient2 = new Ingredient("butter", "Kirkland", "Joshua",
             "fridge",    2.00, 1, "package", 1.00,
-            "pound", LocalDate.now());
+            "pound", LocalDate.now(), LocalDate.now());
     ArrayList<Ingredient> ingredients = new ArrayList<>();
     ingredients.add(ingredient);
     ingredients.add(ingredient2);
@@ -86,6 +86,20 @@ public class IngredientDAOTest {
       ArrayList<Ingredient> sameIngredients = ingredientDAO.getIngredientFromTables("butter");
       assertEquals(ingredient, sameIngredients.get(0));
       assertEquals(ingredient2, sameIngredients.get(1));
+    } catch (SQLException throwables) {
+      fail(throwables.getMessage());
+    }
+  }
+
+  @Test
+  public void selectUsingNameAndBrandTest() {
+    Ingredient ingredient = new Ingredient("butter", "Kirkland", 4.00, 2.50,
+            2.00, 2.25, 1.00, "pounds", "dairy",
+            "Walmart", "Provo");
+    try {
+      ingredientDAO.addIngredientToInformationTable(ingredient);
+      Ingredient sameIngredient = ingredientDAO.selectUsingNameAndBrand("butter", "Kirkland");
+      assertEquals(ingredient, sameIngredient);
     } catch (SQLException throwables) {
       fail(throwables.getMessage());
     }

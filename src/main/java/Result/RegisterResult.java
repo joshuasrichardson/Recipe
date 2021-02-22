@@ -51,7 +51,7 @@ public class RegisterResult extends Result{
     if (o == null || getClass() != o.getClass()) return false;
     if (!super.equals(o)) return false;
     RegisterResult that = (RegisterResult) o;
-    return Objects.equals(authToken, that.authToken) && Objects.equals(username, that.username) && Objects.equals(personID, that.personID);
+    return Objects.equals(username, that.username) && Objects.equals(personID, that.personID);
   }
 
   @Override

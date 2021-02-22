@@ -111,7 +111,7 @@ public class IngredientDAO {
       stmt.setDouble(8, ingredient.getAmount());
       stmt.setString(9, ingredient.getUnit());
       stmt.setString(10, ingredient.getPurchaseDate().toString());
-      stmt.setString(10, ingredient.getExpirationDate().toString());
+      stmt.setString(11, ingredient.getExpirationDate().toString());
 
       int rowsAffected = stmt.executeUpdate();
       if (rowsAffected == 1) {
@@ -229,6 +229,15 @@ public class IngredientDAO {
     if (!atLeastOneInInventory) ingredients.add(ingredient);
 
     return ingredients;
+  }
+
+  public Ingredient selectUsingNameAndBrand(String ingredientName, String ingredientBrand) throws SQLException {
+    Database db = new Database(this.connection);
+    Ingredient ingredient = new Ingredient();
+    ResultSet resultSet = db.selectUsingMultipleColumns(
+            "ingredientInformation,ingredientName," + ingredientName,
+            "ingredientInformation,brand," + ingredientBrand);
+    return setIngredientInformation(ingredient, resultSet);
   }
 
 }

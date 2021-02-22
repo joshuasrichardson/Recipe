@@ -64,7 +64,7 @@ public class IngredientService {
   private Ingredient createNewIngredient(IngredientRequest request) {
     Ingredient newIngredient = new Ingredient();
     newIngredient.setName(request.getIngredientName());
-    newIngredient.setOwner("Megumi");//FIXME:do something
+    newIngredient.setOwner(findOwner("authToken"));//FIXME: replace authToken
     newIngredient.setMostRecentPrice(request.getMostRecentPrice());
     newIngredient.setAveragePricePerUnit(calculateAveragePrice(request.getMostRecentPrice()));
     newIngredient.setSalePricePerUnit(calculateSalePrice(request.getMostRecentPrice()));
@@ -79,9 +79,15 @@ public class IngredientService {
     newIngredient.setBrand(request.getBrand());
     newIngredient.setCity(request.getCity());
     newIngredient.setFoodGroup(request.getFoodGroup());
+    newIngredient.setStorageContainer(request.getStorageContainer());
     newIngredient.setAllergens(request.getAllergens());
 
     return newIngredient;
+  }
+
+  //FIXME: go find the user who is connected to the token, and return their first and last name.
+  private String findOwner(String authToken) {
+    return "Megumi Sakae";
   }
 
   //FIXME: use the authToken to get the username out of the database.
@@ -91,6 +97,7 @@ public class IngredientService {
 
   //FIXME: get the current average, get the total number bought, calculate the new average, and return the new average.
   private Double calculateAveragePrice(Double mostRecentPrice) {
+
     return Double.valueOf(1);
   }
 

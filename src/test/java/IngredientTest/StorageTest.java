@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Timeout;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +34,7 @@ public class StorageTest {
       assertEquals ("vanilla yogurt", ingredient.getName());
       assertEquals (32, ingredient.getAmount());
       assertEquals ("ounces", ingredient.getUnit());
-      assertEquals (new Date(2021,2,19), ingredient.getExpirationDate());
+      assertEquals (LocalDate.of(2021,2,19), ingredient.getExpirationDate());
       assertEquals (1.84, ingredient.getMostRecentPrice());
       assertEquals ("Walmart", ingredient.getMostRecentStore());
       assertEquals ("Great Value", ingredient.getBrand());

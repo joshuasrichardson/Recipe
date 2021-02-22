@@ -120,7 +120,7 @@ public class Ingredient {
    * @param expirationDate
    */
   public Ingredient(String name, String brand, String owner, String storageContainer, double mostRecentPrice,
-                    int number, String container, double amount, String unit, LocalDate expirationDate) {
+                    int number, String container, double amount, String unit, LocalDate purchaseDate, LocalDate expirationDate) {
     this.name = name;
     this.owner = owner;
     this.storageContainer = storageContainer;
@@ -129,6 +129,7 @@ public class Ingredient {
     this.unit = unit;
     this.number = number;
     this.container = container;
+    this.purchaseDate = purchaseDate;
     this.expirationDate = expirationDate;
     this.brand = brand;
   }

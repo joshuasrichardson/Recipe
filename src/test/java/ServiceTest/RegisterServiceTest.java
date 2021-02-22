@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,7 +38,7 @@ public class RegisterServiceTest {
             "email", "firstName", "lastName");
     RegisterService service = new RegisterService(true);
     RegisterResult result = service.register(request);
-    RegisterResult expectedResult = new RegisterResult("username" + LocalDate.now().toString(), "username", "lastNameusername", true);
+    RegisterResult expectedResult = new RegisterResult("username".hashCode() + LocalDateTime.now().toString(), "username", "lastNameusername", true);
     assertEquals(expectedResult, result);
   }
 
@@ -59,7 +60,7 @@ public class RegisterServiceTest {
     service.register(request);
     RegisterResult registerTwiceResult = service.register(request);
     RegisterResult expectedResult = new RegisterResult(false, "Error: [SQLITE_CONSTRAINT_PRIMARYKEY]  A PRIMARY KEY constraint failed " +
-            "(UNIQUE constraint failed: User.person_id)");
+            "(UNIQUE constraint failed: User.userID)");
     assertEquals(expectedResult, registerTwiceResult);
   }
 }

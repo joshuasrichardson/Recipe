@@ -14,6 +14,7 @@ public class IngredientRequest {
   private String unit;
   private String expirationDate;
   private String foodGroup;
+  private String storageContainer;
   private String mostRecentStore;
   private String city;
   private ArrayList<String> allergens;
@@ -24,7 +25,7 @@ public class IngredientRequest {
 
   public IngredientRequest(String ingredientName, String brand, Double mostRecentPrice, Integer number,
                            String container, Double amount, String unit, String expirationDate,
-                           String foodGroup, String mostRecentStore, String city, ArrayList<String> allergens) {
+                           String foodGroup, String storageContainer, String mostRecentStore, String city, ArrayList<String> allergens) {
     this.ingredientName = ingredientName;
     this.brand = brand;
     this.mostRecentPrice = mostRecentPrice;
@@ -34,6 +35,7 @@ public class IngredientRequest {
     this.unit = unit;
     this.expirationDate = (expirationDate);
     this.foodGroup = foodGroup;
+    this.storageContainer = storageContainer;
     this.mostRecentStore = mostRecentStore;
     this.city = city;
     this.allergens = allergens;
@@ -103,6 +105,10 @@ public class IngredientRequest {
     return foodGroup;
   }
 
+  public String getStorageContainer() {
+    return storageContainer;
+  }
+
   public ArrayList<String> getAllergens() {
     return allergens;
   }
@@ -149,6 +155,22 @@ public class IngredientRequest {
 
   public void setFoodGroup(String foodGroup) {
     this.foodGroup = foodGroup;
+  }
+
+  public void setMostRecentPrice(Double mostRecentPrice) {
+    this.mostRecentPrice = mostRecentPrice;
+  }
+
+  public void setNumber(Integer number) {
+    this.number = number;
+  }
+
+  public void setAmount(Double amount) {
+    this.amount = amount;
+  }
+
+  public void setStorageContainer(String storageContainer) {
+    this.storageContainer = storageContainer;
   }
 
   public void setAllergens(ArrayList<String> allergens) {
