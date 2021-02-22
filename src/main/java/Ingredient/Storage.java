@@ -1,5 +1,6 @@
 package Ingredient;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -32,7 +33,7 @@ public class Storage {
 
   public Ingredient addIngredientToStorage(Scanner input) {
 
-    Ingredient newIngredient;
+    Ingredient newIngredient = new Ingredient();
     String ingredientName;
     String amountWithUnit;
     int amount = 0;
@@ -42,7 +43,7 @@ public class Storage {
     int year;
     int month;
     int day;
-    Date expirationDate;
+    LocalDate expirationDate;
     String brand;
     String foodGroup;
     String city;
@@ -51,7 +52,7 @@ public class Storage {
 
     System.out.println("What ingredient would you like to add?");
     ingredientName = input.nextLine();
-    newIngredient = new Ingredient(ingredientName);
+    newIngredient.setName(ingredientName);
 
     System.out.println("How much/many? (number then unit)");
     amountWithUnit = input.nextLine();
@@ -88,7 +89,7 @@ public class Storage {
         month = input.nextInt();
         if (input.hasNextInt()) {
           day = input.nextInt();
-          expirationDate = new Date(year, month, day);
+          expirationDate = LocalDate.of(year, month, day);
           newIngredient.setExpirationDate(expirationDate);
         }
       }

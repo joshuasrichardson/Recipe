@@ -94,7 +94,7 @@ public class Main {
 
         if (selection == 2) {
           Ingredient ingredient = storage.addIngredientToStorage(input);
-          ingredientDAO.addIngredientToTable(ingredient, storage);
+          //FIXME::ingredientDAO.addIngredientToTable(ingredient, storage);
         }
 
         if (selection == 9) {

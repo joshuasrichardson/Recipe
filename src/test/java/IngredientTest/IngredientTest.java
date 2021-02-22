@@ -3,6 +3,7 @@ package IngredientTest;
 import Ingredient.Ingredient;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,7 @@ public class IngredientTest {
   public void IngredientConstructorTest() {
 
     ArrayList<String> allergens = new ArrayList<>(List.of("dairy"));
-    Date date = new Date(2021, 10, 1);
+    LocalDate date = LocalDate.of(2021, 10, 1);
 
     Ingredient milk = new Ingredient("milk", 1.98, 1, "gallon",
             1, "carton", "Walmart", date, "Great Value",

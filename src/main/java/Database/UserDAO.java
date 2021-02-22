@@ -31,12 +31,12 @@ public class UserDAO {
   public boolean createUserTable() throws SQLException {
     PreparedStatement stmt = null;
     String sql = "CREATE TABLE IF NOT EXISTS User (\n" +
-            "person_id varchar(255) not null primary key, \n" +
+            "userID varchar(255) not null primary key, \n" +
             "username varchar(255) not null, \n" +
             "password varchar(255) not null, \n" +
             "email varchar(255) not null, \n" +
-            "first_name varchar(255) not null, \n" +
-            "last_name varchar(255) not null);";
+            "firstName varchar(255) not null, \n" +
+            "lastName varchar(255) not null);";
     stmt = connection.prepareStatement(sql);
     stmt.execute();
     return true;
@@ -57,7 +57,7 @@ public class UserDAO {
    */
   public boolean addUserToTable(User user) throws SQLException {
     PreparedStatement stmt = null;
-      String sql = "INSERT INTO User (person_id, username, password, email, first_name, last_name) " +
+      String sql = "INSERT INTO User (userID, username, password, email, firstName, lastName) " +
               "values (?, ?, ?, ?, ?, ?)";
       stmt = connection.prepareStatement(sql);
       stmt.setString(1, user.getUserID());
@@ -107,7 +107,7 @@ public class UserDAO {
    * clears the User table in the database.
    * @throws SQLException if the User table doesn't exist etc.
    */
-  public void clearTable() throws SQLException {
+  public void clearUserTable() throws SQLException {
     PreparedStatement stmt = null;
     String sql = "DELETE FROM User;";
     stmt = connection.prepareStatement(sql);

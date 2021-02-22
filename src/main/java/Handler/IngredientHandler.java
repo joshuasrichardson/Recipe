@@ -25,7 +25,7 @@ public class IngredientHandler implements HttpHandler {
     IngredientService service = new IngredientService();
 
     try {
-      encoder.addAuthTokenToJson(authToken, jsonString);
+      //jsonString = encoder.addAuthTokenToJson(authToken, jsonString);
     }
     catch (IllegalArgumentException e) {
       return "Error: " + e.getMessage();
@@ -51,6 +51,8 @@ public class IngredientHandler implements HttpHandler {
       if (exchange.getRequestMethod().toLowerCase().equals("post")) {
         Headers reqHeaders = exchange.getRequestHeaders();
         String authToken = reqHeaders.getFirst("Authorization");
+
+        System.out.println(authToken);
 
         InputStream reqBody = exchange.getRequestBody();
         String reqData = encoder.readString(reqBody);

@@ -9,16 +9,23 @@ import java.util.Scanner;
 import java.util.Set;
 
 /**
- * deals with adding and removing things from the database to store information
+ * deals with adding, selecting, and removing things from the database to store information.
  */
 public class Database {
 
   private Connection connection;
 
+  /**
+   * creates a database without a connection to be connected later.
+   */
   public Database() {
 
   }
 
+  /**
+   * creates a Database object that is connected to a database.
+   * @param connection the connection to the dataabse.
+   */
   public Database(Connection connection) {
     this.connection = connection;
   }
@@ -39,6 +46,9 @@ public class Database {
 
   /**
    * connects to the database
+   * @param connectionURL a String with the url to connect to
+   * @return the connection
+   * @throws SQLException
    */
   public Connection openConnection(String connectionURL) throws SQLException {
     final String CONNECTION_URL = connectionURL;
@@ -123,6 +133,9 @@ public class Database {
               "recipeName varchar(255)", "ingredientName varchar(255)", "amount double", "units varchar(255)");
       createTable("AuthTokens", "authToken", "varchar(255)",
               "userID varchar(255)");
+      createTable("User", "userID", "varchar(255)",
+              "username varchar(255)", "password varchar(255)", "email varchar(255)",
+              "firstName varchar(255)", "lastName varchar(255)");
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -254,75 +267,10 @@ public class Database {
    * @param
    * @return
    */
-  public Object selectFromTable(String table, String primaryKey, Object primaryKeyValue) {
-    String sql = "select * from " + table + " where " + primaryKey + " = \'" + primaryKeyValue + "\';";
-    Object obj = null;
-    try {
-      Statement keyStmt = connection.createStatement();
-      ResultSet keyRS = keyStmt.executeQuery(sql);
-
-      if (table.equals("ingredient")) {
-        obj = setIngredient(keyRS);
-      }
-      else if (table.equals("recipes")) {
-
-      }
-      else if (table.equals("recipeBook")) {
-
-      }
-      else if (table.equals("recipeToIngredients")) {
-
-      }
-      else {
-        throw new Exception("Not a valid table name.");
-      }
-    }
-    catch (SQLException throwables) {
-      throwables.printStackTrace();
-    }
-    catch (Exception e) {
-      System.out.println(e.getMessage());
-    }
-    return obj;
-  }
-
-  //FIXME: change the order of the numbers to make sense
-  public Ingredient setIngredient(ResultSet keyRS) {
-    Ingredient ingredient = new Ingredient();
-    try {
-      while(keyRS.next()) {
-        String name = keyRS.getString(1);
-        ingredient.setName(name);
-        double averagePrice = keyRS.getDouble(3);
-        ingredient.setAveragePrice(averagePrice);
-        double salePrice = keyRS.getDouble(4);
-        ingredient.setSalePrice(salePrice);
-        double mostRecentPrice = keyRS.getDouble(5);
-        ingredient.setMostRecentPrice(mostRecentPrice);
-        double amount = keyRS.getDouble(6);
-        ingredient.setAmount(amount);
-        String measurement = keyRS.getString(7);
-        ingredient.setUnit(measurement);
-        int number = keyRS.getInt(12);
-        ingredient.setNumber(number);
-        String container = keyRS.getString(13);
-        ingredient.setContainer(container);
-        String cheapestStore = keyRS.getString(15);
-        ingredient.setCheapestStore(cheapestStore);
-        String mostRecentStore = keyRS.getString(14);
-        ingredient.setMostRecentStore(mostRecentStore);
-        String expirationDateString = keyRS.getString(8);
-        Date expirationDate = parseDate(expirationDateString);
-        ingredient.setExpirationDate(expirationDate);
-        String brand = keyRS.getString(9);
-        ingredient.setBrand(brand);
-        String foodGroup = keyRS.getString(10);
-        ingredient.setFoodGroup(foodGroup);
-      }
-    } catch (SQLException throwables) {
-      throwables.printStackTrace();
-    }
-    return ingredient;
+  public ResultSet selectFromTable(String table, String column, Object value) throws SQLException {
+    String sql = "select * from " + table + " where " + column + " = \'" + value + "\';";
+    Statement keyStmt = connection.createStatement();
+    return keyStmt.executeQuery(sql);
   }
 
   //FIXME:: Find the date in the string and make it into a date type
@@ -367,5 +315,27 @@ public class Database {
     return names;
   }
 
+  /**
+   * clears out the values of a single table
+   * @param tableName the name of the table to clear
+   * @throws SQLException
+   */
+  public void clearTable(String tableName) throws SQLException {
+    PreparedStatement stmt = null;
+    String sql = "DELETE FROM " + tableName + ";";
+    stmt = connection.prepareStatement(sql);
+    stmt.execute();
+  }
 
+  /**
+   * clears all tables in the database.
+   * @return whether it was successful
+   * @throws SQLException
+   */
+  public boolean clearAllTables() throws SQLException
+  {
+    clearTable("User");
+    clearTable("AuthTokens");
+    return true;
+  }
 }

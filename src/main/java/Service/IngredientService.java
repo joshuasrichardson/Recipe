@@ -7,6 +7,7 @@ import Request.IngredientRequest;
 import Result.IngredientResult;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class IngredientService {
 
@@ -24,20 +25,26 @@ public class IngredientService {
     if (request.hasAllNecessaryFields().equals("大丈夫です")) {
 
       Ingredient newIngredient = createNewIngredient(request);
-      Storage storage = new Storage(getUsername(request.getAuthToken()));
+      //Storage storage = new Storage(getUsername(request.getAuthToken()));
       Database db = new Database();
 
       try {
         IngredientDAO ingredientDAO = new IngredientDAO(db.getConnection("jdbc:sqlite:" +
-                getUsername(request.getAuthToken()) + ".sqlite"));
-        ingredientDAO.createIngredientTable();
-        ingredientDAO.addIngredientToTable(newIngredient, storage);
+                getUsername(/*request.getAuthToken())*/"s") + ".sqlite"));
+        ingredientDAO.createIngredientInformationTable();
+        ingredientDAO.createIngredientInventoryTable();
+        db.closeConnection(commit);
+
+        ingredientDAO = new IngredientDAO(db.getConnection("jdbc:sqlite:" +
+                getUsername(/*request.getAuthToken())*/"s") + ".sqlite"));
+        ingredientDAO.addIngredientToInformationTable(newIngredient);
+        ingredientDAO.addIngredientToInventoryTable(newIngredient);
 
         return new IngredientResult(true, newIngredient.getName() + " was successfully added to " +
-                newIngredient.getContainer() + "'s storage.");
+                newIngredient.getOwner() + "'s storage.");
       }
       catch (SQLException e) {
-        return new IngredientResult(false, "Error: (while adding " + request.getName() + ") " + e.getMessage());
+        return new IngredientResult(false, "Error: (while adding " + request.getIngredientName() + ") " + e.getMessage());
       }
       finally {
         try {
@@ -56,17 +63,19 @@ public class IngredientService {
 
   private Ingredient createNewIngredient(IngredientRequest request) {
     Ingredient newIngredient = new Ingredient();
-    newIngredient.setName(request.getName());
+    newIngredient.setName(request.getIngredientName());
+    newIngredient.setOwner("Megumi");//FIXME:do something
     newIngredient.setMostRecentPrice(request.getMostRecentPrice());
-    newIngredient.setAveragePrice(calculateAveragePrice(request.getMostRecentPrice()));
-    newIngredient.setSalePrice(calculateSalePrice(request.getMostRecentPrice()));
+    newIngredient.setAveragePricePerUnit(calculateAveragePrice(request.getMostRecentPrice()));
+    newIngredient.setSalePricePerUnit(calculateSalePrice(request.getMostRecentPrice()));
     newIngredient.setAmount(request.getAmount());
     newIngredient.setUnit(request.getUnit());
     newIngredient.setNumber(request.getNumber());
     newIngredient.setContainer(request.getContainer());
     newIngredient.setMostRecentStore(request.getMostRecentStore());
     newIngredient.setCheapestStore(calculateCheapestStore(request.getMostRecentStore(), request.getMostRecentPrice()));
-    newIngredient.setExpirationDate(request.getExpirationDate());
+    newIngredient.setPurchaseDate(LocalDate.now());
+    newIngredient.setExpirationDate(LocalDate.parse(request.getExpirationDate()));
     newIngredient.setBrand(request.getBrand());
     newIngredient.setCity(request.getCity());
     newIngredient.setFoodGroup(request.getFoodGroup());
@@ -77,7 +86,7 @@ public class IngredientService {
 
   //FIXME: use the authToken to get the username out of the database.
   private String getUsername(String authToken) {
-    return "RecipeTest";
+    return "recipeTest";
   }
 
   //FIXME: get the current average, get the total number bought, calculate the new average, and return the new average.

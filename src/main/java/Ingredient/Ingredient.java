@@ -1,7 +1,10 @@
 package Ingredient;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * stores information about ingredients including their name, average price, sale price, most recent price,
@@ -11,31 +14,27 @@ import java.util.Date;
 public class Ingredient {
   private int ingredientID;
   private String name;
-  private double averagePrice = -1;
-  private double salePrice = -1;
-  private double mostRecentPrice = -1;
-  private double amount = -1;
+  private String owner;
+  private String storageContainer;
+  private double averagePricePerUnit;
+  private double salePricePerUnit;
+  private double mostRecentPricePerUnit;
+  private double mostRecentPrice;
+  private double amount;
+  private double totalAmountBought;
   private String unit;
-  private int number = -1;
+  private int number;
   private String container;
   private String cheapestStore;
   private String mostRecentStore;
-  private Date expirationDate;
+  private LocalDate purchaseDate;
+  private LocalDate expirationDate;
   private String brand;
   private String city;
   private String foodGroup;
   private ArrayList<String> allergens;
 
   public Ingredient() {}
-
-  /**
-   * constructs a new ingredient with only a name
-   *
-   * @param name of the ingredient
-   */
-  public Ingredient(String name) {
-    this.name = name;
-  }
 
   /**
    * constructs an ingredient to be used in a recipe
@@ -51,23 +50,6 @@ public class Ingredient {
   }
 
   /**
-   * constructs an ingredient with commonly known variables
-   *
-   * @param name
-   * @param mostRecentPrice
-   * @param amount
-   * @param unit
-   * @param expirationDate
-   */
-  public Ingredient(String name, double mostRecentPrice, double amount, String unit, Date expirationDate) {
-    this.name = name;
-    this.mostRecentPrice = mostRecentPrice;
-    this.amount = amount;
-    this.unit = unit;
-    this.expirationDate = expirationDate;
-  }
-
-  /**
    * constructs an ingredient with many variables
    *
    * @param name
@@ -78,7 +60,7 @@ public class Ingredient {
    * @param expirationDate
    */
   public Ingredient(String name, double mostRecentPrice, double amount, String unit, int number, String container,
-                    String mostRecentStore, Date expirationDate, String brand, String city, String foodGroup,
+                    String mostRecentStore, LocalDate expirationDate, String brand, String city, String foodGroup,
                     ArrayList<String> allergens) {
     this.name = name;
     this.mostRecentPrice = mostRecentPrice;
@@ -94,19 +76,86 @@ public class Ingredient {
     this.allergens = allergens;
   }
 
+  /**
+   * constructs an Ingredient object with the information needed for the ingredientInformation table.
+   * @param name
+   * @param brand
+   * @param totalAmountBought
+   * @param averagePricePerUnit
+   * @param salePricePerUnit
+   * @param mostRecentPricePerUnit
+   * @param amount
+   * @param unit
+   * @param foodGroup
+   * @param cheapestStore
+   * @param city
+   */
+  public Ingredient(String name, String brand, double totalAmountBought, double averagePricePerUnit,
+                    double salePricePerUnit, double mostRecentPricePerUnit, double amount, String unit,
+                    String foodGroup, String cheapestStore, String city) {
+    this.name = name;
+    this.averagePricePerUnit = averagePricePerUnit;
+    this.salePricePerUnit = salePricePerUnit;
+    this.mostRecentPricePerUnit = mostRecentPricePerUnit;
+    this.amount = amount;
+    this.totalAmountBought = totalAmountBought;
+    this.unit = unit;
+    this.cheapestStore = cheapestStore;
+    this.brand = brand;
+    this.city = city;
+    this.foodGroup = foodGroup;
+  }
+
+  /**
+   * constructs an Ingredient object with the information needed for the ingredientInventory table.
+   * @param name
+   * @param brand
+   * @param owner
+   * @param storageContainer
+   * @param mostRecentPrice
+   * @param number
+   * @param container
+   * @param amount
+   * @param unit
+   * @param expirationDate
+   */
+  public Ingredient(String name, String brand, String owner, String storageContainer, double mostRecentPrice,
+                    int number, String container, double amount, String unit, LocalDate expirationDate) {
+    this.name = name;
+    this.owner = owner;
+    this.storageContainer = storageContainer;
+    this.mostRecentPrice = mostRecentPrice;
+    this.amount = amount;
+    this.unit = unit;
+    this.number = number;
+    this.container = container;
+    this.expirationDate = expirationDate;
+    this.brand = brand;
+  }
+
   public int getIngredientID() { return ingredientID; }
 
   public String getName() {
     return name;
   }
 
-  public double getAveragePrice() {
-    return averagePrice;
+  public String getOwner() {
+    return owner;
   }
 
-  public double getSalePrice() {
-    return salePrice;
+  public String getStorageContainer() {
+    return storageContainer;
   }
+
+  public double getAveragePricePerUnit() {
+    return averagePricePerUnit;
+  }
+
+  public double getSalePricePerUnit() {
+    return salePricePerUnit;
+  }
+
+  public double getMostRecentPricePerUnit() { return mostRecentPricePerUnit; }
 
   public double getMostRecentPrice() {
     return mostRecentPrice;
@@ -115,6 +164,8 @@ public class Ingredient {
   public double getAmount() {
     return amount;
   }
+
+  public double getTotalAmountBought() { return totalAmountBought; }
 
   public String getCheapestStore() { return cheapestStore; }
 
@@ -130,7 +181,11 @@ public class Ingredient {
 
   public String getContainer() { return container; }
 
-  public Date getExpirationDate() {
+  public LocalDate getPurchaseDate() {
+    return purchaseDate;
+  }
+
+  public LocalDate getExpirationDate() {
     return expirationDate;
   }
 
@@ -146,12 +201,24 @@ public class Ingredient {
 
   public void setName(String name) { this.name = name; }
 
-  public void setAveragePrice(double averagePrice) {
-    this.averagePrice = averagePrice;
+  public void setOwner(String owner) {
+    this.owner = owner;
   }
 
-  public void setSalePrice(double salePrice) {
-    this.salePrice = salePrice;
+  public void setStorageContainer(String storageContainer) {
+    this.storageContainer = storageContainer;
+  }
+
+  public void setAveragePricePerUnit(double averagePricePerUnit) {
+    this.averagePricePerUnit = averagePricePerUnit;
+  }
+
+  public void setSalePricePerUnit(double salePricePerUnit) {
+    this.salePricePerUnit = salePricePerUnit;
+  }
+
+  public void setMostRecentPricePerUnit(double mostRecentPricePerUnit) {
+    this.mostRecentPricePerUnit = mostRecentPricePerUnit;
   }
 
   public void setMostRecentPrice(double mostRecentPrice) {
@@ -160,6 +227,10 @@ public class Ingredient {
 
   public void setAmount(double amount) {
     this.amount = amount;
+  }
+
+  public void setTotalAmountBought(double totalAmountBought) {
+    this.totalAmountBought = totalAmountBought;
   }
 
   public void setUnit(String unit) {
@@ -174,7 +245,11 @@ public class Ingredient {
     this.mostRecentStore = mostRecentStore;
   }
 
-  public void setExpirationDate(Date expirationDate) {
+  public void setPurchaseDate(LocalDate purchaseDate) {
+    this.purchaseDate = purchaseDate;
+  }
+
+  public void setExpirationDate(LocalDate expirationDate) {
     this.expirationDate = expirationDate;
   }
 
@@ -247,11 +322,24 @@ public class Ingredient {
   }
 
   @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Ingredient that = (Ingredient) o;
+    return Objects.equals(name, that.name) && Objects.equals(brand, that.brand);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, brand, foodGroup);
+  }
+
+  @Override
   public String toString() {
     return "Ingredient{" +
             "Name: " + name + '\n' +
-            "Average Price: $" + averagePrice + " for " + amount + " " + unit + '\n' +
-            "Sale Price: $" + salePrice + " for " + amount + " " + unit + '\n' +
+            "Average Price: $" + averagePricePerUnit + " for " + amount + " " + unit + '\n' +
+            "Sale Price: $" + salePricePerUnit + " for " + amount + " " + unit + '\n' +
             "Most Recent Price: $" + mostRecentPrice + " for " + amount + " " + unit + '\n' +
             "Cheapest at " + cheapestStore + '\n' +
             "Expires: " + expirationDate + '\n' +

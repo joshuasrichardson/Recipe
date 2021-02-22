@@ -7,6 +7,8 @@ import Database.Database;
 import Database.UserDAO;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * a class to tell the data access objects to create a new user.
@@ -59,7 +61,7 @@ public class RegisterService {
         userDAO.addUserToTable(newUser);
 
         userDAO.createAuthTokensTable();
-        String authToken = generateAuthToken();
+        String authToken = generateAuthToken(newUser.getUsername());
         userDAO.addAuthTokenToTable(authToken, newUser.getUserID());
 
         return new RegisterResult(authToken, newUser.getUsername(), newUser.getUserID(), true);
@@ -84,7 +86,7 @@ public class RegisterService {
 
   private User createNewUser(RegisterRequest registerRequest) {
     User newUser = new User();
-    newUser.setUserID(generateUserID());
+    newUser.setUserID(generateUserID(registerRequest.getLastName(), registerRequest.getUsername()));
     newUser.setUsername(registerRequest.getUsername());
     newUser.setPassword(registerRequest.getPassword());
     newUser.setEmail(registerRequest.getEmail());
@@ -94,13 +96,12 @@ public class RegisterService {
     return newUser;
   }
 
-  //FIXME: Find out what to do about the IDs. Add static variable to this class? to the User class? something else?
-  private static String generateUserID() {
-    return "FIXME::Add ID here";
+  private static String generateUserID(String lastName, String username) {
+    return lastName + username;
   }
 
-  //FIXME: Find out what to do about authTokens.
-  private static String generateAuthToken() {
-    return "token";
+  private static String generateAuthToken(String username) {
+    LocalDateTime dateTime = LocalDateTime.now();
+    return username.hashCode() + dateTime.toString();
   }
 }
