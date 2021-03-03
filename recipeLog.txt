@@ -1,0 +1,16 @@
+Mar 02, 2021 6:29:36 PM Main.Server run
+INFO: Starting Server.
+Mar 02, 2021 6:30:14 PM Handler.post.RegisterHandler handle
+INFO: Starting login.
+Mar 02, 2021 6:31:11 PM Handler.post.RegisterHandler handle
+INFO: Starting login.
+Mar 02, 2021 6:31:37 PM Handler.post.LoginHandler handle
+INFO: Starting login.
+Mar 02, 2021 6:32:00 PM Handler.post.AddIngredientHandler handle
+INFO: Starting to add ingredient.
+Mar 02, 2021 6:32:00 PM Service.AddIngredientService addIngredient
+INFO: Adding an ingredient.
+Mar 02, 2021 6:32:19 PM Handler.get.GetIngredientHandler handle
+INFO: Starting to get ingredients.
+Mar 02, 2021 6:32:19 PM Service.GetIngredientService getIngredient
+INFO: Getting an ingredient.

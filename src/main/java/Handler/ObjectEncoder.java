@@ -1,7 +1,8 @@
 package Handler;
 
-import com.google.gson.Gson;
 import Request.*;
+
+import com.google.gson.Gson;
 
 import java.io.*;
 
@@ -21,10 +22,35 @@ public class ObjectEncoder {
     return stringBuilder.toString();
   }
 
-  public Object toObject(String jsonString, Object object) throws HandlerException {
-    if (object instanceof RegisterRequest) return gson.fromJson(jsonString, RegisterRequest.class);
-    if (object instanceof IngredientRequest) return gson.fromJson(jsonString, IngredientRequest.class);
-    throw new HandlerException();
+  /**
+   * checks to see if a json string can convert to an object.
+   * @param jsonString the json to convert.
+   * @param objectType object to convert the json to.
+   * @return whether the string can convert.
+   */
+  public boolean jsonMatchesObject(String jsonString, Class objectType) {
+    if (objectType.equals(RegisterRequest.class)) {
+      return (jsonString.contains("\"username\":") &&
+              jsonString.contains("\"password\":") &&
+              jsonString.contains("\"email\":") &&
+              jsonString.contains("\"firstName\":") &&
+              jsonString.contains("\"lastName\":"));
+    }
+    if (objectType.equals(LoginRequest.class)) {
+      return (jsonString.contains("\"username\":") &&
+              jsonString.contains("\"password\":"));
+    }
+    return false;
+  }
+
+  /**
+   * changes a json string request into an object of its type.
+   * @param jsonString the string to process.
+   * @param objectType the object to change the string to.
+   * @return the new request object.
+   */
+  public Object toObject(String jsonString, Class objectType) {
+    return gson.fromJson(jsonString, objectType);
   }
 
   /**

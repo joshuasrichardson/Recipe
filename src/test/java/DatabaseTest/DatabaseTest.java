@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static test.ServerTest.TEST_CONNECTION_URL;
 
 public class DatabaseTest {
 
@@ -20,7 +21,7 @@ public class DatabaseTest {
   public void connect() {
     database = new Database();
     try {
-      database.openConnection("jdbc:sqlite:recipeTest.sqlite");
+      database.openConnection(TEST_CONNECTION_URL);
     } catch (SQLException throwables) {
       throwables.printStackTrace();
     }

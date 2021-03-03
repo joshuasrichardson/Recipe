@@ -26,92 +26,145 @@ public class UserDAO {
   /**
    * creates a table that stores information about the user if it doesn't already exist.
    * @return whether a table was created for the current user.
-   * @throws SQLException
+   * @throws DatabaseAccessException
    */
-  public boolean createUserTable() throws SQLException {
+  public boolean createUserTable() throws DatabaseAccessException {
     PreparedStatement stmt = null;
-    String sql = "CREATE TABLE IF NOT EXISTS User (\n" +
-            "userID varchar(255) not null primary key, \n" +
-            "username varchar(255) not null, \n" +
-            "password varchar(255) not null, \n" +
-            "email varchar(255) not null, \n" +
-            "firstName varchar(255) not null, \n" +
-            "lastName varchar(255) not null);";
-    stmt = connection.prepareStatement(sql);
-    stmt.execute();
+    try {
+      String sql = "CREATE TABLE IF NOT EXISTS User (\n" +
+              "username varchar(255) not null primary key, \n" +
+              "password varchar(255) not null, \n" +
+              "email varchar(255) not null, \n" +
+              "firstName varchar(255) not null, \n" +
+              "lastName varchar(255) not null);";
+      stmt = connection.prepareStatement(sql);
+      stmt.execute();
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DatabaseAccessException("SQL Error encountered while creating User table");
+    }
     return true;
-  }
-
-  public void createAuthTokensTable() throws SQLException {
-    Database db = new Database(this.connection);
-
-    db.createTable("AuthTokens", "authToken", "varchar(255)",
-            "userID varchar(255)");
   }
 
   /**
    * uses the information provided by the user to add them to the table.
    * @param user the user to add to the table.
    * @return whether the user was added to the table.
-   * @throws SQLException
+   * @throws DatabaseAccessException
    */
-  public boolean addUserToTable(User user) throws SQLException {
+  public boolean addUserToTable(User user) throws DatabaseAccessException {
     PreparedStatement stmt = null;
-      String sql = "INSERT INTO User (userID, username, password, email, firstName, lastName) " +
-              "values (?, ?, ?, ?, ?, ?)";
+    try {
+      String sql = "INSERT INTO User (username, password, email, firstName, lastName) " +
+              "values (?, ?, ?, ?, ?)";
       stmt = connection.prepareStatement(sql);
-      stmt.setString(1, user.getUserID());
-      stmt.setString(2, user.getUsername());
-      stmt.setString(3, user.getPassword());
-      stmt.setString(4, user.getEmail());
-      stmt.setString(5, user.getFirstName());
-      stmt.setString(6, user.getLastName());
+      stmt.setString(1, user.getUsername());
+      stmt.setString(2, user.getPassword());
+      stmt.setString(3, user.getEmail());
+      stmt.setString(4, user.getFirstName());
+      stmt.setString(5, user.getLastName());
       stmt.execute();
-    return true;
-  }
-
-  public boolean addAuthTokenToTable(String authToken, String userID) throws SQLException {
-    PreparedStatement stmt = null;
-    String sql = "INSERT INTO AuthTokens (authToken, userID) " +
-            "values (?, ?)";
-    stmt = connection.prepareStatement(sql);
-    stmt.setString(1, authToken);
-    stmt.setString(2, userID);
-    stmt.execute();
+    } catch (SQLException e) {
+      throw new DatabaseAccessException("User already exists.");
+    }
     return true;
   }
 
   /**
-   * gets a user object from the database table.
-   * @param userID the way to identify the user.
-   * @return whether a new table was created.
-   * @throws SQLException
+   * accesses a user from the database using only their username.
+   * @param username the username of the person to access.
+   * @return the User.
+   * @throws DatabaseAccessException
    */
-  public User accessUserFromTable(String userID) throws SQLException {
+  public User accessUserFromTable(String username) throws DatabaseAccessException {
     User user = new User();
     PreparedStatement stmt;
-    String sql = "SELECT * FROM User WHERE person_id = \'" + userID + "\';";
-    stmt = connection.prepareStatement(sql);
-    ResultSet keyRS = stmt.executeQuery();
-    keyRS.next();
-    user.setUserID(keyRS.getString(1));
-    user.setUsername(keyRS.getString(2));
-    user.setPassword(keyRS.getString(3));
-    user.setEmail(keyRS.getString(4));
-    user.setFirstName(keyRS.getString(5));
-    user.setLastName(keyRS.getString(6));
+    try {
+      String sql = "SELECT * FROM User WHERE username = '" + username + "';";
+      stmt = connection.prepareStatement(sql);
+      ResultSet keyRS = stmt.executeQuery();
+      keyRS.next();
+      user.setUsername(keyRS.getString(1));
+      user.setPassword(keyRS.getString(2));
+      user.setEmail(keyRS.getString(3));
+      user.setFirstName(keyRS.getString(4));
+      user.setLastName(keyRS.getString(5));
+    } catch (SQLException e) {
+      throw new DatabaseAccessException("The user doesn't exist.");
+    }
+    return user;
+  }
+
+  /**
+   * gets a user from the table using two columns.
+   * @param column column with information to check.
+   * @param value value of the column.
+   * @return the user to login or something.
+   * @throws DatabaseAccessException
+   */
+  public User accessUserFromTable(String column, String value) throws DatabaseAccessException {
+    User user = new User();
+    PreparedStatement stmt;
+    try {
+      String sql = "SELECT * FROM User WHERE " + column + " = '" + value + "';";
+      stmt = connection.prepareStatement(sql);
+      ResultSet keyRS = stmt.executeQuery();
+      keyRS.next();
+      user.setUsername(keyRS.getString(1));
+      user.setPassword(keyRS.getString(2));
+      user.setEmail(keyRS.getString(3));
+      user.setFirstName(keyRS.getString(4));
+      user.setLastName(keyRS.getString(5));
+    } catch (SQLException e) {
+      throw new DatabaseAccessException("The user doesn't exist.");
+    }
+    return user;
+  }
+
+  /**
+   * gets a user from the table using two columns.
+   * @param column1 first column with information to check.
+   * @param value1 value of the first column.
+   * @param column2 second column with information to check.
+   * @param value2 value of the second column.
+   * @return the user to login or something.
+   * @throws DatabaseAccessException
+   */
+  public User accessUserFromTable(String column1, String value1, String column2, String value2) throws DatabaseAccessException {
+    User user = new User();
+    PreparedStatement stmt;
+    try {
+      String sql = "SELECT * FROM User WHERE " + column1 + " = '" + value1 + "'\n" +
+              "\tAND " + column2 + " = '" + value2 + "';";
+      stmt = connection.prepareStatement(sql);
+      ResultSet keyRS = stmt.executeQuery();
+      keyRS.next();
+      user.setUsername(keyRS.getString(1));
+      user.setPassword(keyRS.getString(2));
+      user.setEmail(keyRS.getString(3));
+      user.setFirstName(keyRS.getString(4));
+      user.setLastName(keyRS.getString(5));
+    } catch (SQLException e) {
+      throw new DatabaseAccessException("The user doesn't exist, or the password is incorrect.");
+    }
     return user;
   }
 
   /**
    * clears the User table in the database.
-   * @throws SQLException if the User table doesn't exist etc.
+   * @throws DatabaseAccessException if the User table doesn't exist etc.
    */
-  public void clearUserTable() throws SQLException {
+  public void clearTable() throws DatabaseAccessException
+  {
     PreparedStatement stmt = null;
-    String sql = "DELETE FROM User;";
-    stmt = connection.prepareStatement(sql);
-    stmt.execute();
+    try {
+      String sql = "DELETE FROM User;";
+      stmt = connection.prepareStatement(sql);
+      stmt.execute();
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DatabaseAccessException("SQL Error encountered while clearing the user table");
+    }
   }
 
 }

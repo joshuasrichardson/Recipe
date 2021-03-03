@@ -131,15 +131,15 @@ public class IngredientDAO {
    * @param ingredientName
    * @return
    */
-  public ArrayList<Ingredient> getIngredientFromTables(String ingredientName) {
+  public ArrayList<Ingredient> getIngredientFromTables(String ingredientName, String username) {
     Database db = new Database(this.connection);
-    Ingredient ingredient = new Ingredient();
     ArrayList<Ingredient> ingredients = new ArrayList<>();
 
     try {
       ResultSet resultSet = db.selectFromTable("ingredientInformation", "ingredientName", ingredientName);
-      ingredient = setIngredientInformation(ingredient, resultSet);
-      resultSet = db.selectFromTable("ingredientInventory", "ingredientName", ingredientName);
+      Ingredient ingredient = setIngredientInformation(resultSet);
+      resultSet = db.selectUsingMultipleColumns("ingredientInventory,ingredientName," + ingredientName,
+              "ingredientInventory,owner," + username);
       ingredients = setIngredientInventory(ingredient, resultSet);
     }
     catch (SQLException e) {
@@ -148,7 +148,8 @@ public class IngredientDAO {
     return ingredients;
   }
 
-  private Ingredient setIngredientInformation(Ingredient ingredient, ResultSet keyRS) {
+  private Ingredient setIngredientInformation(ResultSet keyRS) {
+    Ingredient ingredient = new Ingredient();
     try {
       while(keyRS.next()) {
         int ingredientID = keyRS.getInt(1);
@@ -237,7 +238,7 @@ public class IngredientDAO {
     ResultSet resultSet = db.selectUsingMultipleColumns(
             "ingredientInformation,ingredientName," + ingredientName,
             "ingredientInformation,brand," + ingredientBrand);
-    return setIngredientInformation(ingredient, resultSet);
+    return setIngredientInformation(resultSet);
   }
 
 }

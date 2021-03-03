@@ -1,37 +1,34 @@
 package Service;
 
+import Model.AuthToken;
 import Model.User;
 import Request.RegisterRequest;
 import Result.RegisterResult;
-import Database.Database;
-import Database.UserDAO;
+import Database.*;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+import static Main.Server.CONNECTION_URL;
 
 /**
  * a class to tell the data access objects to create a new user.
  */
 public class RegisterService {
 
-  private boolean commit = true;
-
-  private final int DEFAULT_GENERATIONS = 4;
+  private String connection;
 
   /**
    * makes a normal RegisterService that commits its changes to the database when there are no errors.
    */
-  public RegisterService() {
-
-  }
+  public RegisterService() { this.connection = CONNECTION_URL; }
 
   /**
-   * makes a normal RegisterService that only commits its changes to the database if <code>commit</code> is true.
-   * @param commit whether or not to commit the changes.
+   *
+   * @param connection
    */
-  public RegisterService(boolean commit) {
-    this.commit = commit;
+  public RegisterService(String connection) {
+    this.connection = connection;
   }
 
   /**
@@ -43,8 +40,6 @@ public class RegisterService {
   public RegisterResult register(RegisterRequest registerRequest) {
     RegisterResult registerResult = createAccount(registerRequest);
 
-
-
     return registerResult;
   }
 
@@ -55,26 +50,30 @@ public class RegisterService {
       Database db = new Database();
 
       try {
-        UserDAO userDAO = new UserDAO(db.getConnection("jdbc:sqlite:" +
-                newUser.getUsername() + ".sqlite"));
+        UserDAO userDAO = new UserDAO(db.getConnection(connection));
         userDAO.createUserTable();
         userDAO.addUserToTable(newUser);
 
-        userDAO.createAuthTokensTable();
-        String authToken = generateAuthToken(newUser.getUsername());
-        userDAO.addAuthTokenToTable(authToken, newUser.getUserID());
+        AuthTokenDAO authTokenDAO = new AuthTokenDAO(db.getConnection(connection));
+        authTokenDAO.createAuthTokenTable();
+        AuthToken authToken = generateAuthToken(newUser.getUsername());
+        authTokenDAO.addAuthTokenToTable(authToken);
 
-        return new RegisterResult(authToken, newUser.getUsername(), newUser.getUserID(), true);
+        return new RegisterResult(authToken.getAuthTokenID(), newUser.getUsername(), newUser.getUsername(), true);
       }
-      catch (SQLException e) {
+      catch (DatabaseAccessException e) {
         return new RegisterResult(false, "Error: " + e.getMessage());
+      }
+      catch (SQLException throwables) {
+        throwables.printStackTrace();
+        return new RegisterResult(false, "Error: " + throwables.getMessage());
       }
       finally {
         try {
-          db.closeConnection(commit);
+          db.closeConnection(true);
         }
         catch (SQLException e) {
-          return new RegisterResult(false, "Error: " + e.getMessage());
+          e.printStackTrace();
         }
       }
     }
@@ -86,7 +85,6 @@ public class RegisterService {
 
   private User createNewUser(RegisterRequest registerRequest) {
     User newUser = new User();
-    newUser.setUserID(generateUserID(registerRequest.getLastName(), registerRequest.getUsername()));
     newUser.setUsername(registerRequest.getUsername());
     newUser.setPassword(registerRequest.getPassword());
     newUser.setEmail(registerRequest.getEmail());
@@ -96,12 +94,9 @@ public class RegisterService {
     return newUser;
   }
 
-  private static String generateUserID(String lastName, String username) {
-    return lastName + username;
-  }
-
-  private static String generateAuthToken(String username) {
-    LocalDateTime dateTime = LocalDateTime.now();
-    return username.hashCode() + dateTime.toString();
+  private static AuthToken generateAuthToken(String username) {
+    LocalTime time = LocalTime.now();
+    String authTokenID = username + time.toString();
+    return new AuthToken(authTokenID, username);
   }
 }

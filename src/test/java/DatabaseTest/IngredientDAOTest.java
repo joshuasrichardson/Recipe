@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static test.ServerTest.TEST_CONNECTION_URL;
 
 public class IngredientDAOTest {
   Database database;
@@ -22,7 +23,7 @@ public class IngredientDAOTest {
   public void connect() {
     database = new Database();
     try {
-      ingredientDAO = new IngredientDAO(database.openConnection("jdbc:sqlite:recipeTest.sqlite"));
+      ingredientDAO = new IngredientDAO(database.openConnection(TEST_CONNECTION_URL));
     } catch (SQLException throwables) {
       throwables.printStackTrace();
     }
@@ -62,7 +63,7 @@ public class IngredientDAOTest {
             "Walmart", "Provo");
     try {
       ingredientDAO.addIngredientToInformationTable(ingredient);
-      Ingredient sameIngredient = ingredientDAO.getIngredientFromTables("butter").get(0);
+      Ingredient sameIngredient = ingredientDAO.getIngredientFromTables("butter", "john").get(0);
       assertEquals(ingredient, sameIngredient);
     } catch (SQLException throwables) {
       fail(throwables.getMessage());
@@ -83,7 +84,7 @@ public class IngredientDAOTest {
     try {
       ingredientDAO.addIngredientToInventoryTable(ingredient);
       ingredientDAO.addIngredientToInventoryTable(ingredient2);
-      ArrayList<Ingredient> sameIngredients = ingredientDAO.getIngredientFromTables("butter");
+      ArrayList<Ingredient> sameIngredients = ingredientDAO.getIngredientFromTables("butter", "Joshua");
       assertEquals(ingredient, sameIngredients.get(0));
       assertEquals(ingredient2, sameIngredients.get(1));
     } catch (SQLException throwables) {

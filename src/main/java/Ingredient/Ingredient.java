@@ -218,9 +218,7 @@ public class Ingredient {
     this.salePricePerUnit = salePricePerUnit;
   }
 
-  public void setMostRecentPricePerUnit(double mostRecentPricePerUnit) {
-    this.mostRecentPricePerUnit = mostRecentPricePerUnit;
-  }
+  public void setMostRecentPricePerUnit(double mostRecentPricePerUnit) { this.mostRecentPricePerUnit = mostRecentPricePerUnit; }
 
   public void setMostRecentPrice(double mostRecentPrice) {
     this.mostRecentPrice = mostRecentPrice;

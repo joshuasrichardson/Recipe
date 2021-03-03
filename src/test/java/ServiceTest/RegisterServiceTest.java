@@ -9,10 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static test.ServerTest.TEST_CONNECTION_URL;
 
 public class RegisterServiceTest {
 
@@ -23,7 +23,7 @@ public class RegisterServiceTest {
   public void setup() {
     try {
       db = new Database();
-      db.getConnection("jdbc:sqlite:username.sqlite");
+      db.getConnection(TEST_CONNECTION_URL);
       db.createTables();
       db.clearAllTables();
       db.closeConnection(true);
@@ -36,17 +36,17 @@ public class RegisterServiceTest {
   public void registerUserTest() {
     RegisterRequest request = new RegisterRequest( "username", "password",
             "email", "firstName", "lastName");
-    RegisterService service = new RegisterService(true);
+    RegisterService service = new RegisterService(TEST_CONNECTION_URL);
     RegisterResult result = service.register(request);
     RegisterResult expectedResult = new RegisterResult("username".hashCode() + LocalDateTime.now().toString(), "username", "lastNameusername", true);
-    assertEquals(expectedResult, result);
+    assertEquals(expectedResult.getUsername(), result.getUsername());
   }
 
   @Test
   public void registerUsernameFailTest() {
     RegisterRequest request = new RegisterRequest(null, "password",
             "email", "firstName", "lastName");
-    RegisterService service = new RegisterService(false);
+    RegisterService service = new RegisterService(TEST_CONNECTION_URL);
     RegisterResult result = service.register(request);
     RegisterResult expectedResult = new RegisterResult(false, "Error: Something is wrong with the user's username.");
     assertEquals(expectedResult, result);
@@ -56,11 +56,10 @@ public class RegisterServiceTest {
   public void registerUserTwiceFailTest() {
     RegisterRequest request = new RegisterRequest("username", "password",
             "email", "firstName", "lastName");
-    RegisterService service = new RegisterService(true);
+    RegisterService service = new RegisterService(TEST_CONNECTION_URL);
     service.register(request);
     RegisterResult registerTwiceResult = service.register(request);
-    RegisterResult expectedResult = new RegisterResult(false, "Error: [SQLITE_CONSTRAINT_PRIMARYKEY]  A PRIMARY KEY constraint failed " +
-            "(UNIQUE constraint failed: User.userID)");
+    RegisterResult expectedResult = new RegisterResult(false, "Error: User already exists.");
     assertEquals(expectedResult, registerTwiceResult);
   }
 }

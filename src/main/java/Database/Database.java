@@ -19,13 +19,11 @@ public class Database {
   /**
    * creates a database without a connection to be connected later.
    */
-  public Database() {
-
-  }
+  public Database() { }
 
   /**
    * creates a Database object that is connected to a database.
-   * @param connection the connection to the dataabse.
+   * @param connection the connection to the database.
    */
   public Database(Connection connection) {
     this.connection = connection;
@@ -126,16 +124,21 @@ public class Database {
       createTable("recipes", "name", "varchar(255)",
               "recipeBookAuthor varchar(255)");
       createTable("recipeBooks", "author", "varchar(255)");
-      createTable("ingredient", "ingredientID", "integer",
-              "name varchar(255)", "storageContainer varchar(255)", "averagePrice integer",
-              "salePrice integer", "mostRecentPrice integer", "amount integer", "measurement varchar(32)",
-              "expirationDate varchar(255)", "brand varchar(255)", "foodGroup varchar(255)", "city varchar(255)");
+      createTable("ingredientInformation", "ingredientID", "INTEGER",
+              "ingredientName VARCHAR(255)", "brand VARCHAR(255)",
+              "totalAmountBought DOUBLE", "averagePricePerUnit DOUBLE", "salePricePerUnit DOUBLE",
+              "mostRecentPricePerUnit DOUBLE", "amount DOUBLE", "unit VARCHAR(32)",
+              "foodGroup VARCHAR(255)", "cheapestStore VARCHAR(255)", "city VARCHAR(255)");
+      createTable("ingredientInventory", "ingredientID", "INTEGER",
+              "ingredientName VARCHAR(255)", "brand VARCHAR(255)", "owner VARCHAR(255)",
+              "storageContainer VARCHAR(255)", "mostRecentPrice DOUBLE", "number INTEGER", "container VARCHAR(255)",
+              "amount DOUBLE", "unit VARCHAR(32)", "purchaseDate VARCHAR(255)", "expirationDate VARCHAR(255)");
       createTable("recipeToIngredients", "id", "integer",
               "recipeName varchar(255)", "ingredientName varchar(255)", "amount double", "units varchar(255)");
       createTable("AuthTokens", "authToken", "varchar(255)",
-              "userID varchar(255)");
-      createTable("User", "userID", "varchar(255)",
-              "username varchar(255)", "password varchar(255)", "email varchar(255)",
+              "username varchar(255)");
+      createTable("User", "username", "varchar(255)",
+              "password varchar(255)", "email varchar(255)",
               "firstName varchar(255)", "lastName varchar(255)");
     } catch (SQLException e) {
       e.printStackTrace();
@@ -312,21 +315,39 @@ public class Database {
   }
 
   private String findTable(String tableColumnValue) {
+
+    assert tableColumnValue.length() > 5;
+    assert tableColumnValue.contains(",");
+
     StringBuilder table = new StringBuilder(tableColumnValue);
     table.delete(table.indexOf(","), table.length());
     return table.toString();
   }
 
   private String findColumn(String tableColumnValue) {
+
+    assert tableColumnValue.length() > 5;
+    assert tableColumnValue.contains(",");
+
     StringBuilder column = new StringBuilder(tableColumnValue);
     column.delete(0, column.indexOf(",") + 1);
+
+    assert tableColumnValue.contains(",");
+
     column.delete(column.indexOf(","), column.length());
     return column.toString();
   }
 
   private String findValue(String tableColumnValue) {
+
+    assert tableColumnValue.length() > 5;
+    assert tableColumnValue.contains(",");
+
     StringBuilder value = new StringBuilder(tableColumnValue);
     value.delete(0, value.indexOf(",") + 1);
+
+    assert tableColumnValue.contains(",");
+
     value.delete(0, value.indexOf(",") + 1);
     return value.toString();
   }
