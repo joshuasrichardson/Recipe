@@ -95,11 +95,11 @@
       document.getElementById("requestBox").value = formatJson("{\"username\":\"username\",\"password\":\"password\"," +
         "\"email\":\"email\",\"firstName\":\"firstname\",\"lastName\":\"lastname\"}");
     }
-    function clear() {
+    /*function clear() {
       window.scrollTo(0, document.body.scrollHeight);
       document.getElementById("handleBox").value = "/clear";
       document.getElementById("requestBox").value = "";
-    }
+    }*/
     function getAllIngredients() {
       window.scrollTo(0, document.body.scrollHeight);
       document.getElementById("handleBox").value = "/ingredients";
@@ -120,13 +120,13 @@
       document.getElementById("handleBox").value = "/recipes/[Replace_With_Recipe_Name]";
       document.getElementById("requestBox").value = "";
     }
-    function fillRecipes(numRecipes) {
+    /*function fillRecipes(numRecipes) {
       window.scrollTo(0, document.body.scrollHeight);
       var api = "/fillRecipes/[Replace_With_User_Name]";
       if (numRecipes) api += "/{numRecipes}";
       document.getElementById("handleBox").value = api;
       document.getElementById("requestBox").value = "";
-    }
+    }*/
     function addIngredient() {
       window.scrollTo(0, document.body.scrollHeight);
       document.getElementById("handleBox").value = "/ingredients/add";
@@ -143,19 +143,20 @@
     <h2>by Joshua Richardson</h2>
   </div>
   <div style="text-align:center;">
-  <img src="spring roll.jpg" width=200 height=250>
-  <img src="tonjiru.jpg" alt="Megumi with tonjiru" width=200 height=250>
+  //<img src="cake.jpg" width=300 height=250>
+  <img src="spring_roll.jpg" width=200 height=250>
+  <img src="tonjiru.jpg" alt="Megumi with tonjiru" width=193 height=250>
   <img src="cookies.jpg" width=200 height=250>
   </div>
   <div>
     <h4>This is used to update and get information from your virtual recipe book and storage container.
-      To try out an API, click on its link below. It will fill the boxes below with the data to be sent with the
+      To try out an action, click on its link below. It will fill the boxes below with the data to be sent with the
       request.
       Edit the data as needed and click Submit.
       Note: This Website's outline was mostly written by BYU's CS department. I have just made changes to make it
       work for this application.</h4>
 
-    <!-- Commands for the Database -->
+    <!-- Commands for the Database 
     <div style="border: 2px solid black;">
       <h1 style="padding-left:1cm; text-decoration: underline;">Database Commands</h1>
       <ul>
@@ -185,71 +186,41 @@
           No authorization authtoken is required.
         </li>
       </ul>
-    </div>
+    </div>-->
 
     <br />
 
     <div style="border: 2px solid black; margin:5px;">
-      <h1 style="padding-left:1cm; text-decoration: underline;">User Commands</h1>
+      <h1 style="padding-left:1cm; text-decoration: underline;">Actions</h1>
       <ul>
         <li>
-          <a href="javascript:login()">/user/login</a> Use this to log in a user. A request body
-          must be supplied specifying the username and password. If login succeeds, an authorization
-          authtoken will be returned. Use this authtoken on other API calls that require authorization.
-          The returned JSON object contains "Authorization" (the authorization authtoken) and "username"
-          (the username that was just logged in).
-          No authorization authtoken is required.
+          <a href="javascript:login()">Login</a> Choose this to login with your username and password. Use the "authtoken" that is returned in the <strong>Response From the Server</strong> box for other actions.
         </li>
         <li>
-          <a href="javascript:register()">/user/register</a> Use this to register a user.
-          An authorization authtoken is returned. Use it just as you would a authtoken from login.
-          Returns the same Json object as log in. It should be noted that when you register a
-          user the database will automatically be filled.(Meaning you do not need to call the /fill API noted above).
-          No authorization authtoken is required.
+          <a href="javascript:register()">Register</a> Choose this to create an account with your username, password, 
+          email, first name, and last name.
         </li>
         <li>
-          <a href="javascript:getAllIngredients()">/ingredients</a> This API will return ALL ingredients
-          of the current user. The current user is determined from the provided
-          authorization authtoken (which is required for this call). The returned JSON object contains
-          "data" which is an array of ingredient objects.
-          Authorization authtoken is required.
+          <a href="javascript:getAllIngredients()">See Ingredients</a> Choose this to see all the ingredients in your storage. Make sure you are logged in and use the "authtoken" in the <strong>Authorization</strong> box.
         </li>
         <li>
-          <a href="javascript:getSingleIngredient()">/ingredients/[ingredientName]</a> This API will return the single
-          ingredient with the specified name. The ingredient must belong to the user associated
-          with the authorization authtoken. The returned JSON contains the requested ingredient object.
-          Authorization authtoken is required.
+          <a href="javascript:getSingleIngredient()">See an Ingredient</a> Choose this to see an ingredient in your storage. Make sure you are logged in and use the "authtoken" in the <strong>Authorization</strong> box. Type the name of the ingredient after <strong>ingredients/</strong> in the <strong>Handle</strong> box.
+        <li>
+          <a href="javascript:addIngredient()">Add an Ingredient</a> Choose this to add an ingredient with all the relevant information into your storage.
         </li>
         <li>
-          <a href="javascript:addIngredient()">/ingredients/add</a> This API will allow a user to add an ingredient with
-          all the relevant information into their virtual storage.
+          <a href="javascript:getAllRecipes()">See Recipes</a> Choose this to see all the recipes in your recipe book. Make sure you are logged in and use the "authtoken" in the <strong>Authorization</strong> box.
         </li>
         <li>
-          <a href="javascript:getAllRecipes()">/recipes</a> This API will return ALL recipes
-          associated with the current user. The current user is determined from the provided an
-          authorization authtoken (which is required for this call). The returned JSON object contains
-          "data" which is an array of recipe objects.
-          Authorization authtoken is required.
-        </li>
-        <li>
-          <a href="javascript:getSingleRecipe()">/recipes/[recipeName]</a> This API will return
-          the single recipe with the specified name. The recipe must belong to the user associated
-          with the authorization authtoken. The returned JSON contains the requested recipe object.
-          Authorization authtoken is required.
+          <a href="javascript:getSingleRecipe()">See a Recipe</a> Choose this to see a recipe in your recipe book. Make sure you are logged in and use the "authtoken" in the <strong>Authorization</strong> box. Type the name of the recipe after <strong>recipes/</strong> in the <strong>Handle</strong> box.
         </li>
       </ul>
     </div>
   </div>
   <div>
     <h5>
-      A few notes:
+      Note:
       <ul>
-        <li>
-          The authorization authtoken is returned from the server in the "Authorization"
-          attribute of the JSON object returned by the "/user/register" and "/user/login" APIs.
-          The authorization authtoken must be placed in the "Authorization" header
-          on all subsequent HTTP requests.
-        </li>
         <li>
           If something fails, the returned JSON object contains a "message" attribute
           which contains a message describing what happened.
@@ -258,7 +229,6 @@
         </li>
       </ul>
     </h5>
-    <p>Try it out here</p>
   </div>
   <div class="w3-row forumDiv">
     <div class="w3-col m4">
