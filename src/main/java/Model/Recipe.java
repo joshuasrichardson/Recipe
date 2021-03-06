@@ -1,6 +1,6 @@
-package Recipe;
+package Model;
 
-import Ingredient.Ingredient;
+import Model.Ingredient;
 
 import java.util.*;
 

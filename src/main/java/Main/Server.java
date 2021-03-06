@@ -3,10 +3,7 @@ package Main;
 import Handler.RecipeHandler;
 import Handler.get.DefaultHandler;
 import Handler.get.GetIngredientHandler;
-import Handler.post.ClearHandler;
-import Handler.post.AddIngredientHandler;
-import Handler.post.LoginHandler;
-import Handler.post.RegisterHandler;
+import Handler.post.*;
 import com.sun.net.httpserver.*;
 
 import java.io.*;
@@ -59,6 +56,8 @@ public class Server {
     server.createContext("/ingredients/add", new AddIngredientHandler());
 
     server.createContext("/ingredients", new GetIngredientHandler());
+
+    server.createContext("/taxes/add", new AddTaxHandler());
 
     server.createContext("/", new DefaultHandler());
 

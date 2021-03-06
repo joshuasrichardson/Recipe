@@ -1,7 +1,7 @@
 package RecipeTest;
 
-import Recipe.Recipe;
-import Recipe.RecipeBook;
+import Model.Recipe;
+import Model.RecipeBook;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

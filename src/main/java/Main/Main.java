@@ -1,10 +1,10 @@
 package Main;
 
 import Database.*;
-import Ingredient.Ingredient;
-import Ingredient.Storage;
-import Recipe.Recipe;
-import Recipe.RecipeBook;
+import Model.Ingredient;
+import Model.Storage;
+import Model.Recipe;
+import Model.RecipeBook;
 
 import java.io.File;
 import java.io.FileNotFoundException;

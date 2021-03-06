@@ -1,7 +1,7 @@
 package Service;
 
 import Database.*;
-import Ingredient.Ingredient;
+import Model.Ingredient;
 import Model.AuthToken;
 import Model.User;
 import Request.GetIngredientRequest;
@@ -13,10 +13,11 @@ import java.util.logging.Level;
 
 import static Main.Server.CONNECTION_URL;
 import static Main.Server.logger;
+import static Service.Calculator.combineIngredients;
 
 public class GetIngredientService {
 
-  private String connection;
+  private final String connection;
 
   Database db = new Database();
 
@@ -43,8 +44,11 @@ public class GetIngredientService {
 
       IngredientDAO ingredientDAO = new IngredientDAO(db.getConnection(connection));
       ArrayList<Ingredient> ingredients = ingredientDAO.getIngredientFromTables(request.getName(), username);
+      if (ingredients.get(0).getAveragePricePerUnit() == 0.0) {
+        return new GetIngredientResult(false, "Error: Ingredient doesn't exist.");
+      }
 
-      Ingredient ingredient = ingredients.get(0);//FIXME::
+      Ingredient ingredient = combineIngredients(ingredients);
 
       return new GetIngredientResult(true, ingredient);
     }

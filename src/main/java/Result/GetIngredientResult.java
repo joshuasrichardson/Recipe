@@ -1,6 +1,6 @@
 package Result;
 
-import Ingredient.Ingredient;
+import Model.Ingredient;
 
 public class GetIngredientResult extends Result {
   Ingredient ingredient;

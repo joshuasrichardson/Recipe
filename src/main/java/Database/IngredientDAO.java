@@ -1,10 +1,13 @@
 package Database;
 
-import Ingredient.*;
+import Model.Ingredient;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+
+import static Main.Server.logger;
 
 public class IngredientDAO {
 
@@ -35,8 +38,8 @@ public class IngredientDAO {
     db.createTable("ingredientInformation", "ingredientID", "INTEGER",
             "ingredientName VARCHAR(255)", "brand VARCHAR(255)",
             "totalAmountBought DOUBLE", "averagePricePerUnit DOUBLE", "salePricePerUnit DOUBLE",
-            "mostRecentPricePerUnit DOUBLE", "amount DOUBLE", "unit VARCHAR(32)",
-            "foodGroup VARCHAR(255)", "cheapestStore VARCHAR(255)", "city VARCHAR(255)");
+            "mostRecentPricePerUnit DOUBLE", "unit VARCHAR(32)", "foodGroup VARCHAR(255)",
+            "cheapestStore VARCHAR(255)", "city VARCHAR(255)");
   }
 
   /**
@@ -56,16 +59,15 @@ public class IngredientDAO {
    * adds an ingredient to the ingredientInformation table.
    *
    * @param ingredient the ingredient to add.
-   * @return whether it was able to enter.
    * @throws SQLException
    */
-  public boolean addIngredientToInformationTable(Ingredient ingredient) throws SQLException {
+  public void addIngredientToInformationTable(Ingredient ingredient) throws SQLException {
     PreparedStatement stmt = null;
     //FIXME: check to see if it's already in the table, and then if it is, just update it without adding a new one.
     try {
       String sql = "insert into ingredientInformation (ingredientName, brand, totalAmountBought, " +
-              "averagePricePerUnit, salePricePerUnit, mostRecentPricePerUnit, amount, unit, foodGroup, cheapestStore, city) " +
-              "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+              "averagePricePerUnit, salePricePerUnit, mostRecentPricePerUnit, unit, foodGroup, cheapestStore, city) " +
+              "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
       stmt = connection.prepareStatement(sql);
       stmt.setString(1, ingredient.getName());
@@ -74,18 +76,13 @@ public class IngredientDAO {
       stmt.setDouble(4, ingredient.getAveragePricePerUnit());
       stmt.setDouble(5, ingredient.getSalePricePerUnit());
       stmt.setDouble(6, ingredient.getMostRecentPricePerUnit());
-      stmt.setDouble(7, ingredient.getAmount());
-      stmt.setString(8, ingredient.getUnit());
-      stmt.setString(9, ingredient.getFoodGroup());
-      stmt.setString(10, ingredient.getCheapestStore());
-      stmt.setString(11, ingredient.getCity());
+      stmt.setString(7, ingredient.getUnit());
+      stmt.setString(8, ingredient.getFoodGroup());
+      stmt.setString(9, ingredient.getCheapestStore());
+      stmt.setString(10, ingredient.getCity());
 
-      int rowsAffected = stmt.executeUpdate();
-      if (rowsAffected == 1) {
-        return true;
-      } else {
-        return false;
-      }
+      stmt.executeUpdate();
+
     } finally {
       if (stmt != null) {
         stmt.close();
@@ -93,7 +90,7 @@ public class IngredientDAO {
     }
   }
 
-  public boolean addIngredientToInventoryTable(Ingredient ingredient) throws SQLException {
+  public void addIngredientToInventoryTable(Ingredient ingredient) throws SQLException {
     PreparedStatement stmt = null;
     try {
       String sql = "insert into ingredientInventory (ingredientName, brand, owner, storageContainer, mostRecentPrice, " +
@@ -113,13 +110,27 @@ public class IngredientDAO {
       stmt.setString(10, ingredient.getPurchaseDate().toString());
       stmt.setString(11, ingredient.getExpirationDate().toString());
 
-      int rowsAffected = stmt.executeUpdate();
-      if (rowsAffected == 1) {
-        return true;
-      } else {
-        return false;
-      }
+      stmt.executeUpdate();
+
     } finally {
+      if (stmt != null) {
+        stmt.close();
+      }
+    }
+  }
+
+  public void removeFromInformationTable(Ingredient ingredient) throws SQLException {
+    PreparedStatement stmt = null;
+    logger.log(Level.INFO, "Removing " + ingredient.getName());
+    try {
+      String sql = "DELETE FROM ingredientInformation " +
+              "WHERE ingredientName = '" + ingredient.getName() + "' AND " +
+              "brand = '" + ingredient.getBrand() + "';";
+
+      stmt = connection.prepareStatement(sql);
+      stmt.executeUpdate();
+    }
+    finally {
       if (stmt != null) {
         stmt.close();
       }
@@ -128,8 +139,8 @@ public class IngredientDAO {
 
   /**
    * finds and returns all the information about an ingredient from the database tables.
-   * @param ingredientName
-   * @return
+   * @param ingredientName the ingredient to get.
+   * @return an array with all that type of ingredient.
    */
   public ArrayList<Ingredient> getIngredientFromTables(String ingredientName, String username) {
     Database db = new Database(this.connection);
@@ -143,9 +154,28 @@ public class IngredientDAO {
       ingredients = setIngredientInventory(ingredient, resultSet);
     }
     catch (SQLException e) {
-      System.out.println("Ingredient doesn't exist. Creating new ingredient.");
+      System.out.println("Ingredient doesn't exist.");
     }
     return ingredients;
+  }
+
+  /**
+   * finds and returns all the information about an ingredient from the database tables.
+   * @param ingredientName
+   * @return
+   */
+  public Ingredient accessIngredientInformation(String ingredientName) throws DatabaseAccessException {
+    Database db = new Database(this.connection);
+    Ingredient ingredient = new Ingredient();
+
+    try {
+      ResultSet resultSet = db.selectFromTable("ingredientInformation", "ingredientName", ingredientName);
+      ingredient = setIngredientInformation(resultSet);
+    }
+    catch (SQLException e) {
+      throw new DatabaseAccessException("Ingredient doesn't exist.");
+    }
+    return ingredient;
   }
 
   private Ingredient setIngredientInformation(ResultSet keyRS) {
@@ -185,15 +215,16 @@ public class IngredientDAO {
 
   /**
    *
-   * @param ingredient the ingredient that holds the information
+   * @param generalIngredient the ingredient that holds the information
    * @param keyRS the result with all the ingredients in the inventory
    * @return a list of ingredients in the inventory
    */
-  private ArrayList<Ingredient> setIngredientInventory(Ingredient ingredient, ResultSet keyRS) {
+  private ArrayList<Ingredient> setIngredientInventory(Ingredient generalIngredient, ResultSet keyRS) {
     ArrayList<Ingredient> ingredients = new ArrayList<>();
     boolean atLeastOneInInventory = false;
     try {
       while (keyRS.next()) {
+        Ingredient ingredient = new Ingredient(generalIngredient);
         int ingredientID = keyRS.getInt(1);
         ingredient.setIngredientID(ingredientID);
         String ingredientName = keyRS.getString(2);
@@ -227,7 +258,7 @@ public class IngredientDAO {
     catch (SQLException throwables) {
       throwables.printStackTrace();
     }
-    if (!atLeastOneInInventory) ingredients.add(ingredient);
+    if (!atLeastOneInInventory) ingredients.add(generalIngredient);
 
     return ingredients;
   }

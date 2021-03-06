@@ -110,6 +110,11 @@
       document.getElementById("handleBox").value = "/ingredients/[Replace_With_Ingredient_Name]";
       document.getElementById("requestBox").value = "";
     }
+    function addIngredient() {
+      window.scrollTo(0, document.body.scrollHeight);
+      document.getElementById("handleBox").value = "/ingredients/add";
+      document.getElementById("requestBox").value = formatJson("{\"ingredientName\":\"name\",\"brand\":\"Kroger\",\"mostRecentPrice\":\"0.00\",\"number\":\"1\",\"container\":\"box\",\"amount\":\"1\",\"unit\":\"ounces\",\"expirationDate\":\"2021-10-31\",\"foodGroup\":\"vegetable\",\"storageContainer\":\"fridge\",\"mostRecentStore\":\"Smith's\",\"city\":\"Provo\",\"allergens\":[]}");
+    }
     function getAllRecipes() {
       window.scrollTo(0, document.body.scrollHeight);
       document.getElementById("handleBox").value = "/recipes";
@@ -120,6 +125,16 @@
       document.getElementById("handleBox").value = "/recipes/[Replace_With_Recipe_Name]";
       document.getElementById("requestBox").value = "";
     }
+    function addRecipe() {
+      window.scrollTo(0, document.body.scrollHeight);
+      document.getElementById("handleBox").value = "/recipes/add";
+      document.getElementById("requestBox").value = formatJson("{\"recipeName\":\"name\",\"ingredients\":[]}");
+    }
+    function addTax() {
+      window.scrollTo(0, document.body.scrollHeight);
+      document.getElementById("handleBox").value = "/taxes/add";
+      document.getElementById("requestBox").value = formatJson("{\"store\":\"Smith's\",\"taxes\":\"0.00\"}");
+    }
     /*function fillRecipes(numRecipes) {
       window.scrollTo(0, document.body.scrollHeight);
       var api = "/fillRecipes/[Replace_With_User_Name]";
@@ -127,11 +142,7 @@
       document.getElementById("handleBox").value = api;
       document.getElementById("requestBox").value = "";
     }*/
-    function addIngredient() {
-      window.scrollTo(0, document.body.scrollHeight);
-      document.getElementById("handleBox").value = "/ingredients/add";
-      document.getElementById("requestBox").value = formatJson("{\"ingredientName\":\"name\",\"brand\":\"Kroger\",\"mostRecentPrice\":\"0.00\",\"number\":\"1\",\"container\":\"box\",\"amount\":\"1\",\"unit\":\"ounces\",\"expirationDate\":\"2021-10-31\",\"foodGroup\":\"vegetable\",\"storageContainer\":\"fridge\",\"mostRecentStore\":\"Smith's\",\"city\":\"Provo\",\"allergens\":[]}");
-    }
+    
   </script>
 </head>
 
@@ -143,18 +154,15 @@
     <h2>by Joshua Richardson</h2>
   </div>
   <div style="text-align:center;">
-  //<img src="cake.jpg" width=300 height=250>
-  <img src="spring_roll.jpg" width=200 height=250>
-  <img src="tonjiru.jpg" alt="Megumi with tonjiru" width=193 height=250>
-  <img src="cookies.jpg" width=200 height=250>
+  <img src="chocolate_cake.jpg" width=320 height=250>
+  <img src="indocurry.jpg" width=350 height=250>
+  <img src="ramen.jpg" width=350 height=250>
   </div>
   <div>
     <h4>This is used to update and get information from your virtual recipe book and storage container.
       To try out an action, click on its link below. It will fill the boxes below with the data to be sent with the
-      request.
-      Edit the data as needed and click Submit.
-      Note: This Website's outline was mostly written by BYU's CS department. I have just made changes to make it
-      work for this application.</h4>
+      request. Edit the data as needed and click Submit.
+    </h4>
 
     <!-- Commands for the Database 
     <div style="border: 2px solid black;">
@@ -166,25 +174,6 @@
           typing it in the address bar or by clicking this link followed by pressing the Submit button below.
           No authorization authtoken is required.
         </li>
-        <li>
-          <a href="javascript:fillRecipes()">/fill/[username]</a> This API will fill the server&apos;s
-          database with data for the specified user name. The "username" parameter is required
-          and must be a user already registered with the server. It can be any user name you choose.
-          If there is any data in the database associated with the given user name, it is erased.
-          This API can be run from a browser by simply typing it in the address bar (or by pressing
-          the link, filling in the details, and clicking submit). The base person generated should be a
-          person representing the user.
-          No authorization authtoken is required.
-        </li>
-        <li>
-          <a href="javascript:fillRecipes(true)">/fill/[username]/{numRecipes}</a> This API will fill the
-          server&apos;s database with data for the specified user name. The "username" parameter
-          is required and must be a user already registered with the server. All the ancestor data
-          associated with this user is erased. This API can be run from a browser by simply
-          typing it in the address bar (or by pressing the link, filling in the details, and clicking submit).
-          The base person generated should be a person representing the user.
-          No authorization authtoken is required.
-        </li>
       </ul>
     </div>-->
 
@@ -193,6 +182,7 @@
     <div style="border: 2px solid black; margin:5px;">
       <h1 style="padding-left:1cm; text-decoration: underline;">Actions</h1>
       <ul>
+        <h5><strong>Account:</strong></h5>
         <li>
           <a href="javascript:login()">Login</a> Choose this to login with your username and password. Use the "authtoken" that is returned in the <strong>Response From the Server</strong> box for other actions.
         </li>
@@ -200,6 +190,7 @@
           <a href="javascript:register()">Register</a> Choose this to create an account with your username, password, 
           email, first name, and last name.
         </li>
+        <h5><strong>Ingredients:</strong></h5>
         <li>
           <a href="javascript:getAllIngredients()">See Ingredients</a> Choose this to see all the ingredients in your storage. Make sure you are logged in and use the "authtoken" in the <strong>Authorization</strong> box.
         </li>
@@ -208,11 +199,19 @@
         <li>
           <a href="javascript:addIngredient()">Add an Ingredient</a> Choose this to add an ingredient with all the relevant information into your storage.
         </li>
+        <h5><strong>Recipes:</strong></h5>
         <li>
           <a href="javascript:getAllRecipes()">See Recipes</a> Choose this to see all the recipes in your recipe book. Make sure you are logged in and use the "authtoken" in the <strong>Authorization</strong> box.
         </li>
         <li>
           <a href="javascript:getSingleRecipe()">See a Recipe</a> Choose this to see a recipe in your recipe book. Make sure you are logged in and use the "authtoken" in the <strong>Authorization</strong> box. Type the name of the recipe after <strong>recipes/</strong> in the <strong>Handle</strong> box.
+        </li>
+        <li>
+          <a href="javascript:addRecipe()">Add a Recipe</a> Choose this to add a recipe to your recipe book.
+        </li>
+        <h5><strong>Money:</strong></h5>
+        <li>
+          <a href="javascript:addTax()">Add Taxes</a> Choose this to add the total taxes from a trip to the store.
         </li>
       </ul>
     </div>
@@ -222,10 +221,7 @@
       Note:
       <ul>
         <li>
-          If something fails, the returned JSON object contains a "message" attribute
-          which contains a message describing what happened.
-          Watch for these as they will give helpful insight into why the server did not
-          work as expected.
+          If something fails, a message with a description of what went wrong will show up in the <strong>Response From the Server</strong> box.
         </li>
       </ul>
     </h5>
@@ -246,11 +242,21 @@
     </div>
     <p class="w3-col w3-container center" style="width:3%"></p>
     <div class="w3-col w3-container bottom" style="width:45%">
-      Response From the server: <textarea id="response" class="responseBody" readonly></textarea>
+      Response From the Server: <textarea id="response" class="responseBody" readonly></textarea>
       <div>
         <p class="w3-col w3-container center" style="width:3%"></p>
       </div>
     </div>
+  </div>
+  <div>
+    <h5>
+      Note:
+      <ul>
+        <li>
+          This website's outline was mostly written by BYU's CS department for the Family Map Server webpage. I have just made changes to make it work for this application.
+        </li>
+      </ul>
+    </h5>
   </div>
 </body>
 

@@ -30,14 +30,7 @@ public class PostHandler {
 
         System.out.println(reqData);
 
-        String returnString = null;
-        if (handler instanceof RegisterHandler) returnString = new RegisterHandler().handleRegister(reqData);
-        else if (handler instanceof LoginHandler) returnString = new LoginHandler().handleLogin(reqData);
-        else if (handler instanceof AddIngredientHandler) {
-          String authToken = getAuthorization(exchange);
-          returnString = new AddIngredientHandler().fulfillRequest(authToken, reqData);
-        }
-        else if (handler instanceof ClearHandler) returnString = new ClearHandler().handleClear();
+        String returnString = handleAppropriateClass(exchange, handler, reqData);
 
         if (returnString.contains("\"success\": true")) success = true;
 
@@ -62,6 +55,22 @@ public class PostHandler {
       e.printStackTrace();
     }
 
+  }
+
+  private String handleAppropriateClass(HttpExchange exchange, Object handler, String reqData) {
+    String returnString = null;
+    if (handler instanceof RegisterHandler) returnString = new RegisterHandler().handleRegister(reqData);
+    else if (handler instanceof LoginHandler) returnString = new LoginHandler().handleLogin(reqData);
+    else if (handler instanceof AddIngredientHandler) {
+      String authToken = getAuthorization(exchange);
+      returnString = new AddIngredientHandler().fulfillRequest(authToken, reqData);
+    }
+    else if (handler instanceof AddTaxHandler) {
+      String authToken = getAuthorization(exchange);
+      returnString = new AddTaxHandler().handleTax(authToken, reqData);
+    }
+    else if (handler instanceof ClearHandler) returnString = new ClearHandler().handleClear();
+    return returnString;
   }
 
   private String getAuthorization(HttpExchange exchange) {

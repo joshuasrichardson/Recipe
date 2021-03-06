@@ -1,10 +1,24 @@
-Mar 04, 2021 2:45:08 PM Main.Server run
+Mar 05, 2021 8:23:31 PM Main.Server run
 INFO: Starting Server.
-Mar 04, 2021 2:50:00 PM Handler.post.RegisterHandler handle
-INFO: Starting login.
-Mar 04, 2021 2:53:18 PM Handler.post.LoginHandler handle
-INFO: Starting login.
-Mar 04, 2021 2:54:26 PM Handler.post.AddIngredientHandler handle
+Mar 05, 2021 8:23:56 PM Handler.post.AddIngredientHandler handle
 INFO: Starting to add ingredient.
-Mar 04, 2021 2:54:26 PM Service.AddIngredientService addIngredient
+Mar 05, 2021 8:23:56 PM Service.AddIngredientService addIngredient
 INFO: Adding an ingredient.
+Mar 05, 2021 8:23:56 PM Database.IngredientDAO removeFromInformationTable
+INFO: Removing chicken
+Mar 05, 2021 8:24:01 PM Handler.post.AddIngredientHandler handle
+INFO: Starting to add ingredient.
+Mar 05, 2021 8:24:01 PM Service.AddIngredientService addIngredient
+INFO: Adding an ingredient.
+Mar 05, 2021 8:24:01 PM Database.IngredientDAO removeFromInformationTable
+INFO: Removing chicken
+Mar 05, 2021 8:24:11 PM Handler.get.GetIngredientHandler handle
+INFO: Starting to get ingredients.
+Mar 05, 2021 8:24:11 PM Service.GetIngredientService getIngredient
+INFO: Getting an ingredient.
+Mar 05, 2021 8:25:23 PM Handler.post.LoginHandler handle
+INFO: Starting login.
+Mar 05, 2021 8:25:33 PM Handler.get.GetIngredientHandler handle
+INFO: Starting to get ingredients.
+Mar 05, 2021 8:25:33 PM Service.GetIngredientService getIngredient
+INFO: Getting an ingredient.

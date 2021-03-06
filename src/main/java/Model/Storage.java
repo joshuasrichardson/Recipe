@@ -1,4 +1,6 @@
-package Ingredient;
+package Model;
+
+import Model.Ingredient;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

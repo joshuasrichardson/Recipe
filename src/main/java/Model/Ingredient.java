@@ -1,9 +1,7 @@
-package Ingredient;
+package Model;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -47,6 +45,29 @@ public class Ingredient {
     this.name = name;
     this.amount = amount;
     this.unit = unit;
+  }
+
+  public Ingredient(Ingredient ingredient) {
+    this.name = ingredient.getName();
+    this.owner = ingredient.getOwner();
+    this.storageContainer = ingredient.getStorageContainer();
+    this.averagePricePerUnit = ingredient.getAveragePricePerUnit();
+    this.salePricePerUnit = ingredient.getSalePricePerUnit();
+    this.mostRecentPricePerUnit = ingredient.getMostRecentPricePerUnit();
+    this.mostRecentPrice = ingredient.getMostRecentPrice();
+    this.amount = ingredient.getAmount();
+    this.totalAmountBought = ingredient.getTotalAmountBought();
+    this.unit = ingredient.getUnit();
+    this.number = ingredient.getNumber();
+    this.container = ingredient.getContainer();
+    this.cheapestStore = ingredient.getCheapestStore();
+    this.mostRecentStore = ingredient.getMostRecentStore();
+    this.purchaseDate = ingredient.getPurchaseDate();
+    this.expirationDate = ingredient.getExpirationDate();
+    this.brand = ingredient.getBrand();
+    this.city = ingredient.getCity();
+    this.foodGroup = ingredient.getFoodGroup();
+    this.allergens = ingredient.getAllergens();
   }
 
   /**

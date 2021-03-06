@@ -1,14 +1,13 @@
 package IngredientTest;
 
-import Ingredient.Ingredient;
-import Ingredient.Storage;
+import Model.Ingredient;
+import Model.Storage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 

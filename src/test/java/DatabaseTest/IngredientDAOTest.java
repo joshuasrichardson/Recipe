@@ -2,7 +2,7 @@ package DatabaseTest;
 
 import Database.Database;
 import Database.IngredientDAO;
-import Ingredient.Ingredient;
+import Model.Ingredient;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

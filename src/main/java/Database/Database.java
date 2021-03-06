@@ -1,7 +1,8 @@
 package Database;
 
-import Ingredient.*;
-import Recipe.*;
+import Model.Ingredient;
+import Model.Recipe;
+import Model.RecipeBook;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -409,6 +410,9 @@ public class Database {
   {
     clearTable("User");
     clearTable("AuthTokens");
+    clearTable("IngredientInformation");
+    clearTable("IngredientInventory");
+    clearTable("Taxes");
     return true;
   }
 }

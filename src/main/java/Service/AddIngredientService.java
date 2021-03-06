@@ -1,9 +1,7 @@
 package Service;
 
 import Database.*;
-import Ingredient.*;
-import Model.AuthToken;
-import Model.User;
+import Model.Ingredient;
 import Request.AddIngredientRequest;
 import Result.AddIngredientResult;
 
@@ -35,17 +33,23 @@ public class AddIngredientService {
       try {
         Ingredient newIngredient = createNewIngredient(authToken, request);
 
-        IngredientDAO ingredientDAO = new IngredientDAO(db.getConnection("jdbc:sqlite:storage.sqlite"));
+        IngredientDAO ingredientDAO = new IngredientDAO(db.getConnection(connection));
         ingredientDAO.createIngredientInformationTable();
         ingredientDAO.createIngredientInventoryTable();
         db.closeConnection(true);
 
-        ingredientDAO = new IngredientDAO(db.getConnection("jdbc:sqlite:storage.sqlite"));
+        ingredientDAO = new IngredientDAO(db.getConnection(connection));
+        ingredientDAO.removeFromInformationTable(newIngredient);
+        db.closeConnection(true);
+
+        ingredientDAO = new IngredientDAO(db.getConnection(connection));
         ingredientDAO.addIngredientToInformationTable(newIngredient);
         ingredientDAO.addIngredientToInventoryTable(newIngredient);
 
-        return new AddIngredientResult(true, newIngredient.getName() + " was successfully added to " +
-                newIngredient.getOwner() + "'s storage.");
+        return new AddIngredientResult(true, newIngredient.getName() + " ($" + newIngredient.getMostRecentPrice() +
+                " for "  + newIngredient.getNumber() + " " + newIngredient.getContainer() + " with " +
+                newIngredient.getAmount() + " " + newIngredient.getUnit() + " in each) was successfully added to " +
+                newIngredient.getOwner() + " storage.");
       }
       catch (SQLException | DatabaseAccessException e) {
         return new AddIngredientResult(false, "Error: (while adding " + request.getIngredientName() + ") " + e.getMessage());
@@ -67,18 +71,24 @@ public class AddIngredientService {
   }
 
   private Ingredient createNewIngredient(String authToken, AddIngredientRequest request) throws SQLException, DatabaseAccessException {
+    Calculator calc = new Calculator(connection);
+
+    //TODO: Match the units of the request and the corresponding item in the database.
+
     Ingredient newIngredient = new Ingredient();
     newIngredient.setName(request.getIngredientName());
-    newIngredient.setOwner(findOwner(authToken).getFirstName());
+    newIngredient.setOwner(new Service(connection).findOwner(authToken).getUsername());
     newIngredient.setMostRecentPrice(request.getMostRecentPrice());
-    newIngredient.setAveragePricePerUnit(calculateAveragePrice(request.getMostRecentPrice()));
-    newIngredient.setSalePricePerUnit(calculateSalePrice(request.getMostRecentPrice()));
+    newIngredient.setMostRecentPricePerUnit(request.getMostRecentPrice() / (request.getNumber() * request.getAmount()));
+    newIngredient.setAveragePricePerUnit(calc.calculateAveragePrice(request));
+    newIngredient.setSalePricePerUnit(calc.calculateSalePricePerUnit(request));
     newIngredient.setAmount(request.getAmount());
+    newIngredient.setTotalAmountBought(calc.calculateTotalAmount(request));
     newIngredient.setUnit(request.getUnit());
     newIngredient.setNumber(request.getNumber());
     newIngredient.setContainer(request.getContainer());
     newIngredient.setMostRecentStore(request.getMostRecentStore());
-    newIngredient.setCheapestStore(calculateCheapestStore(request.getMostRecentStore(), request.getMostRecentPrice()));
+    newIngredient.setCheapestStore(calc.calculateCheapestStore(request.getMostRecentStore(), request.getMostRecentPrice()));
     newIngredient.setPurchaseDate(LocalDate.now());
     newIngredient.setExpirationDate(LocalDate.parse(request.getExpirationDate()));
     newIngredient.setBrand(request.getBrand());
@@ -90,28 +100,4 @@ public class AddIngredientService {
     return newIngredient;
   }
 
-  private User findOwner(String authToken) throws SQLException, DatabaseAccessException {
-    AuthTokenDAO authTokenDAO = new AuthTokenDAO(db.getConnection(connection));
-    AuthToken authTokenObject = authTokenDAO.accessAuthTokenFromTable(authToken);
-    UserDAO userDAO = new UserDAO(db.getConnection(connection));
-    User user = userDAO.accessUserFromTable(authTokenObject.getUsername());
-    return user;
-  }
-
-  //FIXME: get the current average, get the total number bought, calculate the new average, and return the new average.
-  private Double calculateAveragePrice(Double mostRecentPrice) throws SQLException {
-    IngredientDAO ingredientDAO = new IngredientDAO(db.getConnection(connection));
-    return Double.valueOf(1);
-  }
-
-  //FIXME: compare it to the cheapest price per unit in the Database and return the cheaper one.
-  private Double calculateSalePrice(Double mostRecentPrice) {
-    return Double.valueOf(1);
-  }
-
-  //FIXME: get the cheapest store and the sale price from the database and then update the cheapest store if the new
-  //one is cheaper.
-  private String calculateCheapestStore(String mostRecentStore, Double mostRecentPrice) {
-    return "Not implemented yet.";
-  }
 }
