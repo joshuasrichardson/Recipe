@@ -1,14 +1,7 @@
 package Database;
 
-import Model.Ingredient;
-import Model.Recipe;
-import Model.RecipeBook;
-
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
 
 /**
  * deals with adding, selecting, and removing things from the database to store information.
@@ -31,28 +24,13 @@ public class Database {
   }
 
   /**
-   * loads the database driver
-   *
-   * @throws ClassNotFoundException
-   */
-  public void loadDatabaseDriver() throws ClassNotFoundException {
-
-    // Name of class that implements database driver
-    final String driver = "org.sqlite.JDBC";
-
-    // Dynamically load the driver class
-    Class.forName(driver);
-  }
-
-  /**
    * connects to the database
    * @param connectionURL a String with the url to connect to
    * @return the connection
    * @throws SQLException
    */
   public Connection openConnection(String connectionURL) throws SQLException {
-    final String CONNECTION_URL = connectionURL;
-    connection = DriverManager.getConnection(CONNECTION_URL);
+    connection = DriverManager.getConnection(connectionURL);
     connection.setAutoCommit(false);
     return connection;
   }
@@ -78,7 +56,8 @@ public class Database {
   public void closeConnection(boolean commit) throws SQLException {
     if (commit) {
       connection.commit();
-    } else {
+    }
+    else {
       connection.rollback();
     }
 
@@ -147,19 +126,13 @@ public class Database {
   }
 
   /**
-   * adds a column into an existing table.
-   *
-   * @param input the input from the keyboard or file with information about which table and column to update.
+   * adds a column into an existing table. Only used in development.
+   * @param tableName the table to add the column to.
+   * @param columnName the column to add.
+   * @param columnType the type of column to add.
    * @throws SQLException if the column already exists or the table doesn't exist.
    */
-  public void addColumnToTable(Scanner input) throws SQLException {
-    input.nextLine();
-    System.out.println("Enter the name of the table to add to:");
-    String tableName = input.nextLine();
-    System.out.println("Enter the name of the column to add:");
-    String columnName = input.nextLine();
-    System.out.println("Enter the type of the column:");
-    String columnType = input.nextLine();
+  public void addColumnToTable(String tableName, String columnName, String columnType) throws SQLException {
     PreparedStatement stmt = null;
     try {
       String sql = "ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " " + columnType;
@@ -172,73 +145,7 @@ public class Database {
     }
   }
 
-  /**
-   * adds a recipe to the recipes table in the database.
-   *
-   * @param recipe the recipe to be inserted to the database.
-   * @return whether the recipe successfully uploaded to the database.
-   * @throws SQLException if the recipe already exists.
-   */
-  public boolean insertRecipe(Recipe recipe, RecipeBook recipeBook) throws SQLException {
-    PreparedStatement stmt = null;
-    try {
-      String sql = "insert into recipes (name, recipeBookAuthor) values (?, ?)";
 
-      stmt = connection.prepareStatement(sql);
-      stmt.setString(1, recipe.getName());
-      stmt.setString(2, recipeBook.getAuthor());
-
-      int rowsAffected = stmt.executeUpdate();
-      if (rowsAffected == 1) {
-        return true;
-      } else {
-        return false;
-      }
-    } finally {
-      if (stmt != null) {
-        stmt.close();
-      }
-    }
-  }
-
-  /**
-   * inserts a recipe and an ingredient that go together.
-   *
-   * @param recipe     the recipe that uses the ingredient.
-   * @param ingredient the ingredient in the recipe.
-   * @return whether it was properly added.
-   * @throws SQLException if the recipe and ingredient are already together in the table.
-   */
-  public boolean insertRecipeToIngredient(Recipe recipe, Ingredient ingredient) throws SQLException {
-    PreparedStatement stmt = null;
-    try {
-      String sql = "insert into recipeToIngredients (recipeName, ingredientName, amount, units) values (?, ?, ?, ?)";
-
-      stmt = connection.prepareStatement(sql);
-      stmt.setString(1, recipe.getName());
-      stmt.setString(2, ingredient.getName());
-      stmt.setDouble(3, ingredient.getAmount());
-      stmt.setString(4, ingredient.getUnit());
-
-      int rowsAffected = stmt.executeUpdate();
-      if (rowsAffected == 1) {
-        Statement keyStmt = connection.createStatement();
-        ResultSet keyRS = keyStmt.executeQuery("select last_insert_rowid()");
-        keyRS.next();
-        int id = keyRS.getInt(1);   // ID of the new recipe
-
-        recipe.setId(id);
-
-        return true;
-      } else {
-        return false;
-      }
-    } finally {
-      if (stmt != null) {
-        stmt.close();
-      }
-    }
-  }
 
   /**
    * changes a value in a table in the database
@@ -246,18 +153,13 @@ public class Database {
    * @param column the name of the column to update.
    * @param newValue the value to replace what is currently in the table.
    */
-  public void updateDoubleColumn(String table, String primaryKeyName, String name, String column, Double newValue) throws SQLException {
+  /*public void updateDoubleColumn(String table, String primaryKeyName, String name, String column, Double newValue) throws SQLException {
     PreparedStatement stmt = null;
     try {
-      //String sql = "update (?) set (?) = (?) where name = (?)";
       String sql = "UPDATE " + table + "\n" +
               "SET " + column + " = \'" + newValue + "\'\n" +
               "WHERE " + primaryKeyName + " = \'" + name + "\';";
       stmt = connection.prepareStatement(sql);
-      //stmt.setString(1, table);
-      //stmt.setString(2, column);
-      //stmt.setDouble(3, newValue);
-      //stmt.setString(4, name);
       stmt.executeUpdate();
     }
     finally {
@@ -265,14 +167,14 @@ public class Database {
         stmt.close();
       }
     }
-  }
+  }*/
 
   /**
    * gets an ingredient with all the information from the database.
    * @param
    * @return
    */
-  public ResultSet selectFromTable(String table, String column, Object value) throws SQLException {
+  public ResultSet accessFromTable(String table, String column, Object value) throws SQLException {
     String sql = "SELECT * FROM " + table + " WHERE " + column + " = \'" + value + "\';";
     Statement keyStmt = connection.createStatement();
     return keyStmt.executeQuery(sql);
@@ -286,31 +188,26 @@ public class Database {
    * @return a result set with the matching items.
    * @throws SQLException
    */
-  public ResultSet selectUsingMultipleColumns(String... tablesColumnsValues) throws SQLException {
+  public ResultSet accessUsingMultipleColumns(String... tablesColumnsValues) throws SQLException {
     ArrayList<String> tables = new ArrayList<>();
     ArrayList<String> columns = new ArrayList<>();
     ArrayList<String> values = new ArrayList<>();
+
     for (String tableColumnValue : tablesColumnsValues) {
       tables.add(findTable(tableColumnValue));
       columns.add(findColumn(tableColumnValue));
       values.add(findValue(tableColumnValue));
     }
-    StringBuilder sql = new StringBuilder("SELECT * FROM ");
-    for (int i = 0; i < tables.size(); ++i) {
-      boolean sameTable = false;
-      for (int j = 0; j < i; ++j) {
-        if (tables.get(i).equals(tables.get(j))) {
-          sameTable = true;
-        }
-      }
-      if (!sameTable) sql.append(tables.get(i) + ", ");
-    }
+
+    StringBuilder sql = appendTables(tables);
     sql.deleteCharAt(sql.length() - 2);
     sql.append("\nWHERE ");
+
     for (int i = 0; i < columns.size(); ++i) {
       if (i > 0) sql.append(" AND ");
       sql.append(columns.get(i) + " = \'" + values.get(i) + "\'");
     }
+
     Statement keyStmt = connection.createStatement();
     return keyStmt.executeQuery(sql.toString());
   }
@@ -353,40 +250,18 @@ public class Database {
     return value.toString();
   }
 
-  /**
-   * accesses the recipes out of the database
-   *
-   * @return names of recipes
-   */
-  public Set<String> loadRecipes() {
-    Set<String> names = null;
-    try {
-      PreparedStatement stmt = null;
-      ResultSet rs = null;
-      try {
-        String sql = "select name from recipes";
-        stmt = connection.prepareStatement(sql);
-
-        names = new HashSet<>();
-        rs = stmt.executeQuery();
-        while (rs.next()) {
-          String name = rs.getString(1);
-          names.add(name);
-        }
-
-        return names;
-      } finally {
-        if (rs != null) {
-          rs.close();
-        }
-        if (stmt != null) {
-          stmt.close();
+  private StringBuilder appendTables(ArrayList<String> tables) {
+    StringBuilder sql = new StringBuilder("SELECT * FROM ");
+    for (int i = 0; i < tables.size(); ++i) {
+      boolean sameTable = false;
+      for (int j = 0; j < i; ++j) {
+        if (tables.get(i).equals(tables.get(j))) {
+          sameTable = true;
         }
       }
-    } catch (SQLException e) {
-      e.printStackTrace();
+      if (!sameTable) sql.append(tables.get(i) + ", ");
     }
-    return names;
+    return sql;
   }
 
   /**
@@ -409,7 +284,7 @@ public class Database {
   public boolean clearAllTables() throws SQLException
   {
     clearTable("User");
-    clearTable("AuthTokens");
+    clearTable("AuthToken");
     clearTable("IngredientInformation");
     clearTable("IngredientInventory");
     clearTable("Taxes");

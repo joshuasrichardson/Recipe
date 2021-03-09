@@ -43,7 +43,7 @@ public class GetIngredientService {
       String username = retrieveAuthTokenUserUsername(request);
 
       IngredientDAO ingredientDAO = new IngredientDAO(db.getConnection(connection));
-      ArrayList<Ingredient> ingredients = ingredientDAO.getIngredientFromTables(request.getName(), username);
+      ArrayList<Ingredient> ingredients = ingredientDAO.accessIngredientFromTables(request.getName(), username);
       if (ingredients.get(0).getAveragePricePerUnit() == 0.0) {
         return new GetIngredientResult(false, "Error: Ingredient doesn't exist.");
       }

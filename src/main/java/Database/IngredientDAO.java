@@ -12,13 +12,7 @@ import static Main.Server.logger;
 public class IngredientDAO {
 
   Connection connection;
-
-  /**
-   * creates a new Ingredient data access object with no connection to be connected later.
-   */
-  public IngredientDAO() {
-
-  }
+  Database db;
 
   /**
    * creates a new Ingredient data access object with a connection to a database.
@@ -26,6 +20,7 @@ public class IngredientDAO {
    */
   public IngredientDAO(Connection connection) {
     this.connection = connection;
+    this.db = new Database(connection);
   }
 
   /**
@@ -33,8 +28,6 @@ public class IngredientDAO {
    * @throws SQLException
    */
   public void createIngredientInformationTable() throws SQLException {
-    Database db = new Database(this.connection);
-
     db.createTable("ingredientInformation", "ingredientID", "INTEGER",
             "ingredientName VARCHAR(255)", "brand VARCHAR(255)",
             "totalAmountBought DOUBLE", "averagePricePerUnit DOUBLE", "salePricePerUnit DOUBLE",
@@ -47,8 +40,6 @@ public class IngredientDAO {
    * @throws SQLException
    */
   public void createIngredientInventoryTable() throws SQLException {
-    Database db = new Database(this.connection);
-
     db.createTable("ingredientInventory", "ingredientID", "INTEGER",
             "ingredientName VARCHAR(255)", "brand VARCHAR(255)", "owner VARCHAR(255)",
             "storageContainer VARCHAR(255)", "mostRecentPrice DOUBLE", "number INTEGER", "container VARCHAR(255)",
@@ -142,14 +133,13 @@ public class IngredientDAO {
    * @param ingredientName the ingredient to get.
    * @return an array with all that type of ingredient.
    */
-  public ArrayList<Ingredient> getIngredientFromTables(String ingredientName, String username) {
-    Database db = new Database(this.connection);
+  public ArrayList<Ingredient> accessIngredientFromTables(String ingredientName, String username) {
     ArrayList<Ingredient> ingredients = new ArrayList<>();
 
     try {
-      ResultSet resultSet = db.selectFromTable("ingredientInformation", "ingredientName", ingredientName);
+      ResultSet resultSet = db.accessFromTable("ingredientInformation", "ingredientName", ingredientName);
       Ingredient ingredient = setIngredientInformation(resultSet);
-      resultSet = db.selectUsingMultipleColumns("ingredientInventory,ingredientName," + ingredientName,
+      resultSet = db.accessUsingMultipleColumns("ingredientInventory,ingredientName," + ingredientName,
               "ingredientInventory,owner," + username);
       ingredients = setIngredientInventory(ingredient, resultSet);
     }
@@ -165,11 +155,10 @@ public class IngredientDAO {
    * @return
    */
   public Ingredient accessIngredientInformation(String ingredientName) throws DatabaseAccessException {
-    Database db = new Database(this.connection);
     Ingredient ingredient = new Ingredient();
 
     try {
-      ResultSet resultSet = db.selectFromTable("ingredientInformation", "ingredientName", ingredientName);
+      ResultSet resultSet = db.accessFromTable("ingredientInformation", "ingredientName", ingredientName);
       ingredient = setIngredientInformation(resultSet);
     }
     catch (SQLException e) {
@@ -263,10 +252,8 @@ public class IngredientDAO {
     return ingredients;
   }
 
-  public Ingredient selectUsingNameAndBrand(String ingredientName, String ingredientBrand) throws SQLException {
-    Database db = new Database(this.connection);
-    Ingredient ingredient = new Ingredient();
-    ResultSet resultSet = db.selectUsingMultipleColumns(
+  public Ingredient accessUsingNameAndBrand(String ingredientName, String ingredientBrand) throws SQLException {
+    ResultSet resultSet = db.accessUsingMultipleColumns(
             "ingredientInformation,ingredientName," + ingredientName,
             "ingredientInformation,brand," + ingredientBrand);
     return setIngredientInformation(resultSet);

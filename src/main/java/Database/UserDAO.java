@@ -71,31 +71,6 @@ public class UserDAO {
   }
 
   /**
-   * accesses a user from the database using only their username.
-   * @param username the username of the person to access.
-   * @return the User.
-   * @throws DatabaseAccessException
-   */
-  public User accessUserFromTable(String username) throws DatabaseAccessException {
-    User user = new User();
-    PreparedStatement stmt;
-    try {
-      String sql = "SELECT * FROM User WHERE username = '" + username + "';";
-      stmt = connection.prepareStatement(sql);
-      ResultSet keyRS = stmt.executeQuery();
-      keyRS.next();
-      user.setUsername(keyRS.getString(1));
-      user.setPassword(keyRS.getString(2));
-      user.setEmail(keyRS.getString(3));
-      user.setFirstName(keyRS.getString(4));
-      user.setLastName(keyRS.getString(5));
-    } catch (SQLException e) {
-      throw new DatabaseAccessException("The user doesn't exist.");
-    }
-    return user;
-  }
-
-  /**
    * gets a user from the table using two columns.
    * @param column column with information to check.
    * @param value value of the column.

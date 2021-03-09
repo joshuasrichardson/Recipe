@@ -155,6 +155,58 @@ public class Ingredient {
     this.brand = brand;
   }
 
+  /**
+   * constructs an ingredient with all variables.
+   * @param name
+   * @param owner
+   * @param storageContainer
+   * @param averagePricePerUnit
+   * @param salePricePerUnit
+   * @param mostRecentPricePerUnit
+   * @param mostRecentPrice
+   * @param amount
+   * @param totalAmountBought
+   * @param unit
+   * @param number
+   * @param container
+   * @param cheapestStore
+   * @param mostRecentStore
+   * @param purchaseDate
+   * @param expirationDate
+   * @param brand
+   * @param city
+   * @param foodGroup
+   * @param allergens
+   */
+  public Ingredient(String name, String owner, String storageContainer,
+                    double averagePricePerUnit, double salePricePerUnit, double mostRecentPricePerUnit,
+                    double mostRecentPrice, double amount, double totalAmountBought, String unit, int number,
+                    String container, String cheapestStore, String mostRecentStore, LocalDate purchaseDate,
+                    LocalDate expirationDate, String brand, String city, String foodGroup,
+                    ArrayList<String> allergens) {
+    this.ingredientID = ingredientID;
+    this.name = name;
+    this.owner = owner;
+    this.storageContainer = storageContainer;
+    this.averagePricePerUnit = averagePricePerUnit;
+    this.salePricePerUnit = salePricePerUnit;
+    this.mostRecentPricePerUnit = mostRecentPricePerUnit;
+    this.mostRecentPrice = mostRecentPrice;
+    this.amount = amount;
+    this.totalAmountBought = totalAmountBought;
+    this.unit = unit;
+    this.number = number;
+    this.container = container;
+    this.cheapestStore = cheapestStore;
+    this.mostRecentStore = mostRecentStore;
+    this.purchaseDate = purchaseDate;
+    this.expirationDate = expirationDate;
+    this.brand = brand;
+    this.city = city;
+    this.foodGroup = foodGroup;
+    this.allergens = allergens;
+  }
+
   public int getIngredientID() { return ingredientID; }
 
   public String getName() {

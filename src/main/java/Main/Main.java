@@ -20,12 +20,12 @@ public class Main {
   public static void main(String[] args) {
     try {
       String portNumber = null;
-      if (args.length < 1) throw new IllegalArgumentException("No argument provided");
-      else if (args.length == 1 && isPort(args[0])) {
+      if (args.length < 1) {
+        throw new IllegalArgumentException("No argument provided");
+      }
+      else if (args.length == 1) {
         portNumber = args[0];
         new Server().run(portNumber);
-      } else if (args.length == 1 && !isPort(args[0])) {
-        runFromIntellij(args);
       }
     }
     catch (IllegalArgumentException e) {
@@ -41,7 +41,7 @@ public class Main {
   }
 
   private static void runFromIntellij(String[] args) {
-    String userName;
+    /*String userName;
     userName = args[0];
 
     try {
@@ -85,7 +85,7 @@ public class Main {
           try {
             recipeDatabase.insertRecipe(recipe, recipeBook);
             for (int i = 0; i < recipe.getIngredients().size(); ++i) {
-              recipeDatabase.insertRecipeToIngredient(recipe, recipe.getIngredients().get(i));
+              recipeDatabase.insertRecipeIngredients(recipe, recipe.getIngredients().get(i));
             }
           } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -117,7 +117,7 @@ public class Main {
       throwables.printStackTrace();
     } catch (FileNotFoundException f) {
       f.printStackTrace();
-    }
+    }*/
   }
 
   /**

@@ -1,7 +1,6 @@
 package Database;
 
 import Model.Tax;
-import Model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

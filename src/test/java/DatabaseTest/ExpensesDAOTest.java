@@ -27,7 +27,7 @@ public class ExpensesDAOTest {
       database.openConnection(TEST_CONNECTION_URL);
       database.clearAllTables();
       database.closeConnection(true);
-      expensesDAO = new ExpensesDAO(database.openConnection(TEST_CONNECTION_URL));
+      expensesDAO = new ExpensesDAO(database.getConnection(TEST_CONNECTION_URL));
     } catch (SQLException throwables) {
       throwables.printStackTrace();
     }

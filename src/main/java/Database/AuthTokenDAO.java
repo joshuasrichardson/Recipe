@@ -51,7 +51,7 @@ public class AuthTokenDAO {
   public boolean addAuthTokenToTable(AuthToken authToken) throws DatabaseAccessException {
     PreparedStatement stmt = null;
     try {
-      String sql = "INSERT INTO AuthToken (authtoken, username) values (?, ?)";
+      String sql = "INSERT INTO AuthToken (authtoken, username) VALUES (?, ?)";
       stmt = connection.prepareStatement(sql);
       stmt.setString(1, authToken.getAuthTokenID());
       stmt.setString(2, authToken.getUsername());

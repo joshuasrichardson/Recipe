@@ -20,7 +20,7 @@ public class Service {
     AuthTokenDAO authTokenDAO = new AuthTokenDAO(db.getConnection(connection));
     AuthToken authTokenObject = authTokenDAO.accessAuthTokenFromTable(authToken);
     UserDAO userDAO = new UserDAO(db.getConnection(connection));
-    User user = userDAO.accessUserFromTable(authTokenObject.getUsername());
+    User user = userDAO.accessUserFromTable("username", authTokenObject.getUsername());
     db.closeConnection(true);
     return user;
   }
