@@ -8,9 +8,10 @@ import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static test.ServerTest.TEST_CONNECTION_URL;
 
 public class DatabaseTest {
+
+  public final static String TEST_CONNECTION_URL = "jdbc:sqlite:storageTest.sqlite";
 
   Database database;
 

@@ -14,7 +14,7 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static test.ServerTest.TEST_CONNECTION_URL;
+import static DatabaseTest.DatabaseTest.TEST_CONNECTION_URL;
 
 public class UserDAOTest {
   private Database db;

@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static test.ServerTest.TEST_CONNECTION_URL;
+import static DatabaseTest.DatabaseTest.TEST_CONNECTION_URL;
 
 public class RegisterServiceTest {
 

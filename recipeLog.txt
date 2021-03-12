@@ -1,40 +1,4 @@
-Mar 06, 2021 1:24:48 PM Main.Server run
+Mar 11, 2021 10:49:37 PM Main.Server run
 INFO: Starting Server.
-Mar 06, 2021 1:27:36 PM Handler.post.RegisterHandler handle
+Mar 11, 2021 10:49:52 PM Handler.post.LoginHandler handle
 INFO: Starting login.
-Mar 06, 2021 1:27:58 PM Handler.post.LoginHandler handle
-INFO: Starting login.
-Mar 06, 2021 1:28:27 PM Handler.post.AddIngredientHandler handle
-INFO: Starting to add ingredient.
-Mar 06, 2021 1:28:27 PM Service.AddIngredientService addIngredient
-INFO: Adding an ingredient.
-Mar 06, 2021 1:28:27 PM Database.IngredientDAO removeFromInformationTable
-INFO: Removing name
-Mar 06, 2021 1:28:44 PM Handler.post.AddIngredientHandler handle
-INFO: Starting to add ingredient.
-Mar 06, 2021 1:28:44 PM Service.AddIngredientService addIngredient
-INFO: Adding an ingredient.
-Mar 06, 2021 1:28:44 PM Database.IngredientDAO removeFromInformationTable
-INFO: Removing name
-Mar 06, 2021 1:28:56 PM Handler.get.GetIngredientHandler handle
-INFO: Starting to get ingredients.
-Mar 06, 2021 1:28:56 PM Service.GetIngredientService getIngredient
-INFO: Getting an ingredient.
-Mar 06, 2021 2:03:29 PM Handler.post.LoginHandler handle
-INFO: Starting login.
-Mar 06, 2021 2:04:56 PM Handler.post.AddIngredientHandler handle
-INFO: Starting to add ingredient.
-Mar 06, 2021 2:04:56 PM Service.AddIngredientService addIngredient
-INFO: Adding an ingredient.
-Mar 06, 2021 2:04:56 PM Database.IngredientDAO removeFromInformationTable
-INFO: Removing bread
-Mar 06, 2021 2:05:02 PM Handler.post.AddIngredientHandler handle
-INFO: Starting to add ingredient.
-Mar 06, 2021 2:05:02 PM Service.AddIngredientService addIngredient
-INFO: Adding an ingredient.
-Mar 06, 2021 2:05:02 PM Database.IngredientDAO removeFromInformationTable
-INFO: Removing bread
-Mar 06, 2021 2:05:32 PM Handler.get.GetIngredientHandler handle
-INFO: Starting to get ingredients.
-Mar 06, 2021 2:05:32 PM Service.GetIngredientService getIngredient
-INFO: Getting an ingredient.

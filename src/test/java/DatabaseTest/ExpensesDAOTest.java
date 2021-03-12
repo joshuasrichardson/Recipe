@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-import static test.ServerTest.TEST_CONNECTION_URL;
+import static DatabaseTest.DatabaseTest.TEST_CONNECTION_URL;
 
 public class ExpensesDAOTest {
   Database database;

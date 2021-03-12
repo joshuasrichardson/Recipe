@@ -26,9 +26,24 @@ public class Server {
 
   private HttpServer server;
 
-  public void run(String portNumber) {
+  /**
+   * allows the user to go through their recipes and ingredients to help them decide what to make and how to budget
+   * @param args the database to save to (required) and the file to read in (optional)
+   */
+  public static void main(String[] args) {
+    try {
+      if (args.length < 1) throw new IllegalArgumentException("No argument provided");
+      String portNumber = args[0];
+      new Server().run(portNumber);
+    }
+    catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
+    }
+  }
 
-    initLogger();
+  private void run(String portNumber) {
+
+    initializeLogger();
 
     logger.log(Level.INFO, "Starting Server.");
 
@@ -68,7 +83,7 @@ public class Server {
     System.out.println("Server started");
   }
 
-  private static void initLogger() {
+  private static void initializeLogger() {
     FileHandler fileHandler;
 
     try {

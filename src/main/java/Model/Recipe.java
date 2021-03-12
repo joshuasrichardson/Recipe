@@ -46,12 +46,5 @@ public class Recipe {
     return ingredients;
   }
 
-  @Override
-  public String toString() {
-    return "Recipe{'\n'" +
-            "Name: " + name + '\n' +
-            "Ingredients: " + ingredients + '\n' +
-            '}';
-  }
 }
 

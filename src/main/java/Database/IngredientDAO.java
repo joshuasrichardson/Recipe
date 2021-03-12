@@ -54,7 +54,6 @@ public class IngredientDAO {
    */
   public void addIngredientToInformationTable(Ingredient ingredient) throws SQLException {
     PreparedStatement stmt = null;
-    //FIXME: check to see if it's already in the table, and then if it is, just update it without adding a new one.
     try {
       String sql = "insert into ingredientInformation (ingredientName, brand, totalAmountBought, " +
               "averagePricePerUnit, salePricePerUnit, mostRecentPricePerUnit, unit, foodGroup, cheapestStore, city) " +
@@ -112,7 +111,7 @@ public class IngredientDAO {
 
   public void removeFromInformationTable(Ingredient ingredient) throws SQLException {
     PreparedStatement stmt = null;
-    logger.log(Level.INFO, "Removing " + ingredient.getName());
+    //logger.log(Level.INFO, "Removing " + ingredient.getName());
     try {
       String sql = "DELETE FROM ingredientInformation " +
               "WHERE ingredientName = '" + ingredient.getName() + "' AND " +

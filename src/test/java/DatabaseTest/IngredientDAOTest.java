@@ -2,6 +2,7 @@ package DatabaseTest;
 
 import Database.Database;
 import Database.IngredientDAO;
+import Database.DatabaseAccessException;
 import Model.Ingredient;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,9 +13,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-import static test.ServerTest.TEST_CONNECTION_URL;
+import static org.junit.jupiter.api.Assertions.*;
+import static DatabaseTest.DatabaseTest.TEST_CONNECTION_URL;
 
 public class IngredientDAOTest {
   Database database;
@@ -110,12 +110,40 @@ public class IngredientDAOTest {
 
   @Test
   public void removeIngredientTest() {
-
+    try {
+      ingredientDAO.addIngredientToInformationTable(ingredient);
+      Ingredient sameIngredient = ingredientDAO.accessIngredientFromTables("butter", "Joshua").get(0);
+      assertEquals(ingredient, sameIngredient);
+      ingredientDAO.removeFromInformationTable(ingredient);
+      sameIngredient = ingredientDAO.accessIngredientInformation("butter");
+      assertNull(sameIngredient.getName());
+      assertNull(sameIngredient.getBrand());
+      assertNull(sameIngredient.getCheapestStore());
+      assertNull(sameIngredient.getCity());
+      assertNull(sameIngredient.getFoodGroup());
+      assertNull(sameIngredient.getContainer());
+      assertNull(sameIngredient.getExpirationDate());
+    } catch (SQLException | DatabaseAccessException throwables) {
+      fail(throwables.getMessage());
+    }
   }
 
   @Test
   public void removeIngredientNotExistTest() {
-
+    try {
+      ingredientDAO.removeFromInformationTable(ingredient);
+      Ingredient sameIngredient = ingredientDAO.accessIngredientInformation("butter");
+      assertNull(sameIngredient.getName());
+      assertNull(sameIngredient.getBrand());
+      assertNull(sameIngredient.getCheapestStore());
+      assertNull(sameIngredient.getCity());
+      assertNull(sameIngredient.getFoodGroup());
+      assertNull(sameIngredient.getContainer());
+      assertNull(sameIngredient.getExpirationDate());
+    }
+    catch (SQLException | DatabaseAccessException throwables) {
+      fail(throwables.getMessage());
+    }
   }
 
 }

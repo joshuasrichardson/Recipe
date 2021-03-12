@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static test.ServerTest.TEST_CONNECTION_URL;
+import static DatabaseTest.DatabaseTest.TEST_CONNECTION_URL;
 
 public class AuthTokenDAOTest {
 
