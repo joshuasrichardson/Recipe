@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import Result.ClearResult;
-import Main.Server;
+import Server.Server;
 import Service.ClearService;
 
 import java.io.IOException;

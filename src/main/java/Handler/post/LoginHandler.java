@@ -1,7 +1,7 @@
 package Handler.post;
 
 import Handler.ObjectEncoder;
-import Main.Server;
+import Server.Server;
 import Request.LoginRequest;
 import Result.LoginResult;
 import Service.LoginService;

@@ -2,7 +2,6 @@ package Database;
 
 import Model.Ingredient;
 import Model.Recipe;
-import Model.RecipeBook;
 
 import java.sql.*;
 
@@ -21,14 +20,14 @@ public class RecipeDAO {
    * @return whether the recipe successfully uploaded to the database.
    * @throws SQLException if the recipe already exists.
    */
-  public boolean addRecipe(Recipe recipe, RecipeBook recipeBook) throws SQLException {
+  public boolean addRecipe(Recipe recipe) throws SQLException {
     PreparedStatement stmt = null;
     try {
       String sql = "insert into recipes (name, recipeBookAuthor) values (?, ?)";
 
       stmt = connection.prepareStatement(sql);
       stmt.setString(1, recipe.getName());
-      stmt.setString(2, recipeBook.getAuthor());
+      stmt.setString(2, recipe.getOwner());
 
       int rowsAffected = stmt.executeUpdate();
       if (rowsAffected == 1) {

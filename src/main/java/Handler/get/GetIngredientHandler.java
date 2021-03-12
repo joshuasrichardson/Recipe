@@ -1,6 +1,6 @@
 package Handler.get;
 
-import Main.Server;
+import Server.Server;
 import Request.GetIngredientRequest;
 import Result.GetIngredientResult;
 import Service.GetIngredientService;

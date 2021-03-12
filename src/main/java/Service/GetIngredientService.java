@@ -11,8 +11,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-import static Main.Server.CONNECTION_URL;
-import static Main.Server.logger;
+import static Server.Server.CONNECTION_URL;
+import static Server.Server.logger;
 import static Service.Calculator.combineIngredients;
 
 public class GetIngredientService {

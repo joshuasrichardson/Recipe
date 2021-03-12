@@ -10,8 +10,8 @@ import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.logging.Level;
 
-import static Main.Server.CONNECTION_URL;
-import static Main.Server.logger;
+import static Server.Server.CONNECTION_URL;
+import static Server.Server.logger;
 
 /**
  * a class to ask the data access objects for an authorization token with a username and password.

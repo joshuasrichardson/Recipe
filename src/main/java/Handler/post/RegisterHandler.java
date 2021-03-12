@@ -1,7 +1,7 @@
 package Handler.post;
 
 import Handler.ObjectEncoder;
-import Main.Server;
+import Server.Server;
 import Request.RegisterRequest;
 import Result.RegisterResult;
 import Service.RegisterService;

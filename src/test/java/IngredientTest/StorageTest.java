@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StorageTest {
-
+/*
   private File testFile;
 
   private Scanner fileInput;
@@ -49,5 +49,5 @@ public class StorageTest {
   @Test
   public void addIngredientWrongType() {
 
-  }
+  }*/
 }

@@ -1,7 +1,7 @@
 package Handler.post;
 
 import Handler.ObjectEncoder;
-import Main.Server;
+import Server.Server;
 import Request.AddTaxRequest;
 import Result.AddTaxResult;
 import Service.TaxService;

@@ -9,7 +9,7 @@ import Database.*;
 import java.sql.SQLException;
 import java.time.LocalTime;
 
-import static Main.Server.CONNECTION_URL;
+import static Server.Server.CONNECTION_URL;
 
 /**
  * a class to tell the data access objects to create a new user.

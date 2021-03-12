@@ -5,9 +5,6 @@ import Model.Ingredient;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-
-import static Main.Server.logger;
 
 public class IngredientDAO {
 

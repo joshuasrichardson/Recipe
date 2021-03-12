@@ -1,7 +1,7 @@
 package Handler.post;
 
 import Handler.ObjectEncoder;
-import Main.Server;
+import Server.Server;
 import Service.AddIngredientService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

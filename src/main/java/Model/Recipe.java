@@ -13,38 +13,93 @@ public class Recipe {
 
   private String name;
 
-  private ArrayList<Ingredient> ingredients;
+  private String owner;
+
+  private final Map<Ingredient, Double> ingredients = new HashMap<>();
+
+  private String description;
+
+  private String instructions;
+
+  private String appliance;
+
+  private int temperature;
+
+  private int calories;
 
   /**
-   * constructs a recipe with provided name and ingredients that the user can refer to later
+   * constructs a recipe with provided name.
    *
    * @param name name of the recipe
-   * @param ingredients a list of ingredients that is used in the recipe
    */
-  public Recipe(String name, ArrayList<Ingredient> ingredients) {
-    this.name = name;
-    this.ingredients = new ArrayList<>(ingredients);
-  }
+  public Recipe(String name) { this.name = name; }
 
   public int getId() {
     return id;
-  }
-
-  public String getName() {
-    return name;
   }
 
   public void setId(int id) {
     this.id = id;
   }
 
+  public String getName() {
+    return name;
+  }
+
   public void setName(String name) {
     this.name = name;
   }
 
-  public ArrayList<Ingredient> getIngredients() {
+  public String getOwner() {
+    return owner;
+  }
+
+  public void setOwner(String owner) {
+    this.owner = owner;
+  }
+
+  public Map<Ingredient, Double> getIngredients() {
     return ingredients;
   }
 
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getInstructions() {
+    return instructions;
+  }
+
+  public void setInstructions(String instructions) {
+    this.instructions = instructions;
+  }
+
+  public String getAppliance() {
+    return appliance;
+  }
+
+  public void setAppliance(String appliance) {
+    this.appliance = appliance;
+  }
+
+  public int getTemperature() {
+    return temperature;
+  }
+
+  public void setTemperature(int temperature) {
+    this.temperature = temperature;
+  }
+
+  public int getCalories() {
+    return calories;
+  }
+
+  public void setCalories(int calories) {
+    this.calories = calories;
+  }
 }
 

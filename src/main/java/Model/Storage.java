@@ -11,7 +11,7 @@ import java.util.Scanner;
  * Represents the ingredients in the user's fridge, freezer, pantry, etc.
  */
 public class Storage {
-
+/*
   private String name;
 
   public String getName() {
@@ -125,5 +125,5 @@ public class Storage {
 
     return newIngredient;
   }
-
+*/
 }

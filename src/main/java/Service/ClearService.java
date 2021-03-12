@@ -6,8 +6,8 @@ import Result.ClearResult;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
-import static Main.Server.CONNECTION_URL;
-import static Main.Server.logger;
+import static Server.Server.CONNECTION_URL;
+import static Server.Server.logger;
 
 /**
  * a class that tells the data access objects to clear all the tables in the database.

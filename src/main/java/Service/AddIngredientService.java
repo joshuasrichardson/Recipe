@@ -9,8 +9,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.logging.Level;
 
-import static Main.Server.CONNECTION_URL;
-import static Main.Server.logger;
+import static Server.Server.CONNECTION_URL;
+import static Server.Server.logger;
 
 public class AddIngredientService {
 

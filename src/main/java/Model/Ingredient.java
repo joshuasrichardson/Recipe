@@ -34,19 +34,6 @@ public class Ingredient {
 
   public Ingredient() {}
 
-  /**
-   * constructs an ingredient to be used in a recipe
-   *
-   * @param name
-   * @param amount
-   * @param unit
-   */
-  public Ingredient(String name, double amount, String unit) {
-    this.name = name;
-    this.amount = amount;
-    this.unit = unit;
-  }
-
   public Ingredient(Ingredient ingredient) {
     this.name = ingredient.getName();
     this.owner = ingredient.getOwner();
@@ -95,64 +82,6 @@ public class Ingredient {
     this.city = city;
     this.foodGroup = foodGroup;
     this.allergens = allergens;
-  }
-
-  /**
-   * constructs an Ingredient object with the information needed for the ingredientInformation table.
-   * @param name
-   * @param brand
-   * @param totalAmountBought
-   * @param averagePricePerUnit
-   * @param salePricePerUnit
-   * @param mostRecentPricePerUnit
-   * @param amount
-   * @param unit
-   * @param foodGroup
-   * @param cheapestStore
-   * @param city
-   */
-  public Ingredient(String name, String brand, double totalAmountBought, double averagePricePerUnit,
-                    double salePricePerUnit, double mostRecentPricePerUnit, double amount, String unit,
-                    String foodGroup, String cheapestStore, String city) {
-    this.name = name;
-    this.averagePricePerUnit = averagePricePerUnit;
-    this.salePricePerUnit = salePricePerUnit;
-    this.mostRecentPricePerUnit = mostRecentPricePerUnit;
-    this.amount = amount;
-    this.totalAmountBought = totalAmountBought;
-    this.unit = unit;
-    this.cheapestStore = cheapestStore;
-    this.brand = brand;
-    this.city = city;
-    this.foodGroup = foodGroup;
-  }
-
-  /**
-   * constructs an Ingredient object with the information needed for the ingredientInventory table.
-   * @param name
-   * @param brand
-   * @param owner
-   * @param storageContainer
-   * @param mostRecentPrice
-   * @param number
-   * @param container
-   * @param amount
-   * @param unit
-   * @param expirationDate
-   */
-  public Ingredient(String name, String brand, String owner, String storageContainer, double mostRecentPrice,
-                    int number, String container, double amount, String unit, LocalDate purchaseDate, LocalDate expirationDate) {
-    this.name = name;
-    this.owner = owner;
-    this.storageContainer = storageContainer;
-    this.mostRecentPrice = mostRecentPrice;
-    this.amount = amount;
-    this.unit = unit;
-    this.number = number;
-    this.container = container;
-    this.purchaseDate = purchaseDate;
-    this.expirationDate = expirationDate;
-    this.brand = brand;
   }
 
   /**
@@ -398,23 +327,11 @@ public class Ingredient {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Ingredient that = (Ingredient) o;
-    return Objects.equals(name, that.name) && Objects.equals(brand, that.brand);
+    return Objects.equals(name, that.name);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, brand, foodGroup);
-  }
-
-  @Override
-  public String toString() {
-    return "Ingredient{" +
-            "Name: " + name + '\n' +
-            "Average Price: $" + averagePricePerUnit + " for " + amount + " " + unit + '\n' +
-            "Sale Price: $" + salePricePerUnit + " for " + amount + " " + unit + '\n' +
-            "Most Recent Price: $" + mostRecentPrice + " for " + amount + " " + unit + '\n' +
-            "Cheapest at " + cheapestStore + '\n' +
-            "Expires: " + expirationDate + '\n' +
-            '}';
+    return Objects.hash(name);
   }
 }

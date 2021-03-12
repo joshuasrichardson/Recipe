@@ -1,4 +1,4 @@
-package Main;
+package Server;
 
 import Handler.RecipeHandler;
 import Handler.get.DefaultHandler;

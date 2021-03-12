@@ -10,7 +10,7 @@ import java.util.Scanner;
  * stores information about recipes added and accessed by the user by adding them and accessing from their book
  */
 public class RecipeBook {
-
+/*
   private String author;
 
   ArrayList<Recipe> recipes = new ArrayList<>();
@@ -34,7 +34,7 @@ public class RecipeBook {
    *
    * @param input a scanner that takes in user input from the keyboard as they list new ingredients and amounts
    *              for their recipe
-   */
+   *
   public Recipe addRecipe(Scanner input) {
 
     String userRecipeName;
@@ -71,5 +71,5 @@ public class RecipeBook {
     recipes.add(recipe);
 
     return recipe;
-  }
+  }*/
 }
