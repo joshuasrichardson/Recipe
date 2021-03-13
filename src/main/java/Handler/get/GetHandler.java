@@ -38,6 +38,10 @@ public class GetHandler {
           if (urlPath.equals("/ingredient")) header = header;//FIXME::implement get all ingredients.
           else returnString = new GetIngredientHandler().handleIngredient(getSecondPartOfURL(urlPath), authToken);
         }
+        else if (handler instanceof GetRecipeHandler) {
+          if (urlPath.equals("/recipes")) header = header;//FIXME::implement get all
+          else returnString = new GetRecipeHandler().handleRecipe(getSecondPartOfURL(urlPath));
+        }
 
         if (returnString.contains("\"success\": true")) success = true;
 

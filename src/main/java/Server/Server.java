@@ -1,6 +1,6 @@
 package Server;
 
-import Handler.RecipeHandler;
+import Handler.get.GetRecipeHandler;
 import Handler.get.DefaultHandler;
 import Handler.get.GetIngredientHandler;
 import Handler.post.*;
@@ -66,7 +66,9 @@ public class Server {
 
     server.createContext("/clear", new ClearHandler());
 
-    server.createContext("/recipes", new RecipeHandler());
+    server.createContext("/recipes/add", new AddRecipeHandler());
+
+    server.createContext("/recipes", new GetRecipeHandler());
 
     server.createContext("/ingredients/add", new AddIngredientHandler());
 

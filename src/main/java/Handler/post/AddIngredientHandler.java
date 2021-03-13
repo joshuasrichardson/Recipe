@@ -18,7 +18,7 @@ public class AddIngredientHandler implements HttpHandler {
 
   ObjectEncoder encoder = new ObjectEncoder();
 
-  public String fulfillRequest(String authToken, String jsonString) {
+  public String handleIngredient(String authToken, String jsonString) {
     Gson decoder = new GsonBuilder().setPrettyPrinting().create();
     AddIngredientRequest request = new AddIngredientRequest();
     AddIngredientService service = new AddIngredientService();

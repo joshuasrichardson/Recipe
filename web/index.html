@@ -128,7 +128,8 @@
     function addRecipe() {
       window.scrollTo(0, document.body.scrollHeight);
       document.getElementById("handleBox").value = "/recipes/add";
-      document.getElementById("requestBox").value = formatJson("{\"recipeName\":\"name\",\"ingredients\":[]}");
+      document.getElementById("requestBox").value = formatJson("{\"name\":\"chocolate chip cookies\",\"owner\":\"your name\",\"ingredients\": {\"brown sugar\": {\"amount\": 2.0,\"unit\": \"cups\"},\"eggs\": {\"amount\": 3.0,\"unit\": \"eggs\"},\"butter\": {\"amount\": 1.0,\"unit\": \"pounds\"},\"salt\": {\"amount\": 1.5,\"unit\": \"teaspoons\"},\"white sugar\": {\"amount\": 1.5,\"unit\": \"cups\"},\"chocolate chips\": {\"amount\": 4.0,\"unit\": \"cups\"},\"flour\": {\"amount\": 6.0,\"unit\": \"cups\"},\"baking soda\": {\"amount\": 1.5,\"unit\": \"teaspoons\"},\"vanilla\": {\"amount\": 1.5,\"unit\": \"tablespoons\"}},\"servings\": 15,\"description\": \"Super delicious chocolate chip cookies. Contains wheat.\",\"instructions\": \"1. Preheat oven\n2. Mix ingredients\n3. Bake\n4. etc.\",\"minutes\": 30,\"tools\": [\"mixing bowl\",\"spoon\",\"cookie sheets\",\"oven mitts\"],\"appliances\": [\"oven\"],\"temperature\": 350,\"calories\": 300}");
+
     }
     function addTax() {
       window.scrollTo(0, document.body.scrollHeight);

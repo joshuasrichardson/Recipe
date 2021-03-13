@@ -31,7 +31,7 @@ public class AddTaxHandler implements HttpHandler {
 
   @Override
   public void handle(HttpExchange exchange) throws IOException {
-    Server.logger.log(Level.INFO, "Starting to add ingredient.");
+    Server.logger.log(Level.INFO, "Starting to add tax.");
     PostHandler handler = new PostHandler();
     handler.handle(exchange, this);
   }

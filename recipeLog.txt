@@ -1,4 +1,4 @@
-Mar 11, 2021 10:49:37 PM Server.Server run
+Mar 13, 2021 12:17:04 AM Server.Server run
 INFO: Starting Server.
-Mar 11, 2021 10:49:52 PM Handler.post.LoginHandler handle
-INFO: Starting login.
+Mar 13, 2021 12:17:08 AM Handler.get.GetRecipeHandler handle
+INFO: Starting to get recipes.

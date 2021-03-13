@@ -1,7 +1,5 @@
 package Model;
 
-import Model.Ingredient;
-
 import java.util.*;
 
 /**
@@ -15,13 +13,19 @@ public class Recipe {
 
   private String owner;
 
-  private final Map<Ingredient, Double> ingredients = new HashMap<>();
+  private final Map<String, Amount> ingredients = new HashMap<>();
+
+  private int servings;
 
   private String description;
 
   private String instructions;
 
-  private String appliance;
+  private int minutes;
+
+  private ArrayList<String> tools;
+
+  private ArrayList<String> appliances;
 
   private int temperature;
 
@@ -58,7 +62,7 @@ public class Recipe {
     this.owner = owner;
   }
 
-  public Map<Ingredient, Double> getIngredients() {
+  public Map<String, Amount> getIngredients() {
     return ingredients;
   }
 
@@ -78,12 +82,12 @@ public class Recipe {
     this.instructions = instructions;
   }
 
-  public String getAppliance() {
-    return appliance;
+  public ArrayList<String> getAppliances() {
+    return appliances;
   }
 
-  public void setAppliance(String appliance) {
-    this.appliance = appliance;
+  public void setAppliances(ArrayList<String> appliances) {
+    this.appliances = appliances;
   }
 
   public int getTemperature() {
@@ -101,5 +105,20 @@ public class Recipe {
   public void setCalories(int calories) {
     this.calories = calories;
   }
+
+  public int getMinutes() { return minutes; }
+
+  public void setMinutes(int minutes) { this.minutes = minutes; }
+
+  public ArrayList<String> getTools() { return tools; }
+
+  public void setTools(ArrayList<String> tools) { this.tools = tools; }
+
+  public int getServings() { return servings; }
+
+  public void setServings(int servings) { this.servings = servings; }
+
+  public void addIngredient(String ingredientName, Amount amount) { ingredients.put(ingredientName, amount); }
+
 }
 

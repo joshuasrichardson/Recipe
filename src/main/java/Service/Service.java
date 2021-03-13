@@ -9,8 +9,8 @@ import Model.User;
 import java.sql.SQLException;
 
 public class Service {
-  Database db = new Database();
-  String connection;
+  private final Database db = new Database();
+  private final String connection;
 
   Service(String connection) {
     this.connection = connection;

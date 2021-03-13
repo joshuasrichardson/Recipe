@@ -18,7 +18,7 @@ import static Server.Server.logger;
  */
 public class LoginService {
 
-  private String connection;
+  private final String connection;
 
   Database db = new Database();
 

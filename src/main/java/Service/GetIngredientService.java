@@ -19,7 +19,7 @@ public class GetIngredientService {
 
   private final String connection;
 
-  Database db = new Database();
+  private final Database db = new Database();
 
   public GetIngredientService() {
     this.connection = CONNECTION_URL;

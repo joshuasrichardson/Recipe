@@ -13,9 +13,10 @@ import static Server.Server.CONNECTION_URL;
 import static Server.Server.logger;
 
 public class TaxService {
-  private String connection;
 
-  Database db = new Database();
+  private final String connection;
+
+  private final Database db = new Database();
 
   public TaxService() {
     this.connection = CONNECTION_URL;

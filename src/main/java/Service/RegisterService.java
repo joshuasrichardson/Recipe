@@ -16,7 +16,7 @@ import static Server.Server.CONNECTION_URL;
  */
 public class RegisterService {
 
-  private String connection;
+  private final String connection;
 
   /**
    * makes a normal RegisterService that commits its changes to the database when there are no errors.

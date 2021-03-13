@@ -14,7 +14,7 @@ import static Server.Server.logger;
  */
 public class ClearService {
 
-  private String connection;
+  private final String connection;
 
   public ClearService() {
     this.connection = CONNECTION_URL;

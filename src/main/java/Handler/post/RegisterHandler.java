@@ -49,7 +49,7 @@ public class RegisterHandler implements HttpHandler {
    */
   @Override
   public void handle(HttpExchange exchange) throws IOException {
-    Server.logger.log(Level.INFO, "Starting login.");
+    Server.logger.log(Level.INFO, "Starting registration.");
     PostHandler handler = new PostHandler();
     handler.handle(exchange, this);
   }

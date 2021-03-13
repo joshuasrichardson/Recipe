@@ -11,7 +11,7 @@ import java.io.*;
  */
 public class ObjectEncoder {
 
-  private Gson gson = new Gson();
+  private final Gson gson = new Gson();
 
   public String addAuthTokenToJson(String authToken, String json) throws IllegalArgumentException {
     StringBuilder stringBuilder = new StringBuilder(json);

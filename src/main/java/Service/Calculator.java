@@ -11,12 +11,8 @@ import static Server.Server.CONNECTION_URL;
 
 public class Calculator {
 
-  Database db = new Database();
-  String connection = CONNECTION_URL;
-
-  public Calculator() {
-
-  }
+  private final Database db = new Database();
+  private final String connection;
 
   public Calculator(String connection) {
     this.connection = connection;
@@ -68,8 +64,8 @@ public class Calculator {
   }
 
   public Double calculateSalePricePerUnit(AddIngredientRequest request) {
-    Double salePrice = request.getMostRecentPrice();
-    Double salePricePerUnit = salePrice / (request.getNumber() * request.getAmount());
+    double salePrice = request.getMostRecentPrice();
+    double salePricePerUnit = salePrice / (request.getNumber() * request.getAmount());
 
     try {
       IngredientDAO ingredientDAO = new IngredientDAO(db.getConnection(connection));
@@ -96,7 +92,7 @@ public class Calculator {
 
   public Double calculateTotalAmount(AddIngredientRequest request) {
 
-    Double totalAmount = 0.0;
+    double totalAmount = 0.0;
 
     try {
       IngredientDAO ingredientDAO = new IngredientDAO(db.getConnection(connection));
