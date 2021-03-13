@@ -7,13 +7,11 @@ import java.util.*;
  */
 public class Recipe {
 
-  private int id;
-
   private String name;
 
   private String owner;
 
-  private final Map<String, Amount> ingredients = new HashMap<>();
+  private ArrayList<RecipeIngredient> ingredients;
 
   private int servings;
 
@@ -36,14 +34,41 @@ public class Recipe {
    *
    * @param name name of the recipe
    */
-  public Recipe(String name) { this.name = name; }
-
-  public int getId() {
-    return id;
+  public Recipe(String name) {
+    this.name = name;
+    this.ingredients = new ArrayList<>();
+    this.appliances = new ArrayList<>();
+    this.tools = new ArrayList<>();
   }
 
-  public void setId(int id) {
-    this.id = id;
+  /**
+   *
+   * @param name
+   * @param owner
+   * @param servings
+   * @param description
+   * @param instructions
+   * @param minutes
+   * @param tools
+   * @param appliances
+   * @param temperature
+   * @param calories
+   * @param ingredients
+   */
+  public Recipe(String name, String owner, int servings, String description, String instructions, int minutes,
+                ArrayList<String> tools, ArrayList<String> appliances, int temperature, int calories,
+                ArrayList<RecipeIngredient> ingredients) {
+    this.name = name;
+    this.owner = owner;
+    this.servings = servings;
+    this.description = description;
+    this.instructions = instructions;
+    this.minutes = minutes;
+    this.tools = tools;
+    this.appliances = appliances;
+    this.temperature = temperature;
+    this.calories = calories;
+    this.ingredients = ingredients;
   }
 
   public String getName() {
@@ -60,10 +85,6 @@ public class Recipe {
 
   public void setOwner(String owner) {
     this.owner = owner;
-  }
-
-  public Map<String, Amount> getIngredients() {
-    return ingredients;
   }
 
   public String getDescription() {
@@ -118,7 +139,36 @@ public class Recipe {
 
   public void setServings(int servings) { this.servings = servings; }
 
-  public void addIngredient(String ingredientName, Amount amount) { ingredients.put(ingredientName, amount); }
+  public ArrayList<RecipeIngredient> getIngredients() {
+    return ingredients;
+  }
 
+  public void setIngredients(ArrayList<RecipeIngredient> ingredients) {
+    this.ingredients = ingredients;
+  }
+
+  public void addIngredient(RecipeIngredient ingredient) {
+    this.ingredients.add(ingredient);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Recipe recipe = (Recipe) o;
+    return servings == recipe.servings &&
+            minutes == recipe.minutes &&
+            temperature == recipe.temperature &&
+            calories == recipe.calories &&
+            Objects.equals(name, recipe.name) &&
+            Objects.equals(owner, recipe.owner) &&
+            Objects.equals(description, recipe.description) &&
+            Objects.equals(instructions, recipe.instructions);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, owner, servings, description, instructions, minutes, temperature, calories);
+  }
 }
 

@@ -1,4 +1,8 @@
-Mar 13, 2021 12:17:04 AM Server.Server run
+Mar 13, 2021 2:19:01 PM Server.Server run
 INFO: Starting Server.
-Mar 13, 2021 12:17:08 AM Handler.get.GetRecipeHandler handle
+Mar 13, 2021 2:23:51 PM Handler.post.AddRecipeHandler handle
+INFO: Starting to add a recipe.
+Mar 13, 2021 2:23:51 PM Service.AddRecipeService addRecipe
+INFO: Adding a recipe.
+Mar 13, 2021 2:24:43 PM Handler.get.GetRecipeHandler handle
 INFO: Starting to get recipes.

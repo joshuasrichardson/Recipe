@@ -58,33 +58,6 @@ public class Ingredient {
   }
 
   /**
-   * constructs an ingredient with many variables
-   *
-   * @param name
-   * @param mostRecentPrice
-   * @param amount
-   * @param unit
-   * @param mostRecentStore
-   * @param expirationDate
-   */
-  public Ingredient(String name, double mostRecentPrice, double amount, String unit, int number, String container,
-                    String mostRecentStore, LocalDate expirationDate, String brand, String city, String foodGroup,
-                    ArrayList<String> allergens) {
-    this.name = name;
-    this.mostRecentPrice = mostRecentPrice;
-    this.amount = amount;
-    this.unit = unit;
-    this.number = number;
-    this.container = container;
-    this.expirationDate = expirationDate;
-    this.mostRecentStore = mostRecentStore;
-    this.brand = brand;
-    this.city = city;
-    this.foodGroup = foodGroup;
-    this.allergens = allergens;
-  }
-
-  /**
    * constructs an ingredient with all variables.
    * @param name
    * @param owner
@@ -113,7 +86,6 @@ public class Ingredient {
                     String container, String cheapestStore, String mostRecentStore, LocalDate purchaseDate,
                     LocalDate expirationDate, String brand, String city, String foodGroup,
                     ArrayList<String> allergens) {
-    this.ingredientID = ingredientID;
     this.name = name;
     this.owner = owner;
     this.storageContainer = storageContainer;

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class ExpensesDAO {
 
   private final Connection connection;
+  private final Database db;
 
   /**
    * creates a connection to the user table and updates and retrieves information.
@@ -19,29 +20,16 @@ public class ExpensesDAO {
    */
   public ExpensesDAO(Connection connection) {
     this.connection = connection;
+    this.db = new Database(connection);
   }
 
   /**
    * creates a table that stores information about taxes.
-   * @return whether a table was created for the taxes.
-   * @throws DatabaseAccessException if there was a problem adding to the database or something.
+   * @throws SQLException if there was a problem adding to the database or something.
    */
-  public boolean createTaxesTable() throws DatabaseAccessException {
-    PreparedStatement stmt = null;
-    try {
-      String sql = "CREATE TABLE IF NOT EXISTS Taxes (\n" +
-              "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \n" +
-              "username VARCHAR(255) NOT NULL, \n" +
-              "store VARCHAR(255) NOT NULL, \n" +
-              "taxes DOUBLE NOT NULL, \n" +
-              "date varchar(255) NOT NULL);";
-      stmt = connection.prepareStatement(sql);
-      stmt.execute();
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new DatabaseAccessException("SQL Error encountered while creating Taxes table");
-    }
-    return true;
+  public void createTaxesTable() throws SQLException {
+    db.createTable("Taxes", "id", "INTEGER", "username VARCHAR(255)",
+            "store VARCHAR(255)", "taxes DOUBLE", "date VARCHAR(255)");
   }
 
   /**
@@ -77,7 +65,7 @@ public class ExpensesDAO {
     ArrayList<Tax> taxes = new ArrayList<>();
     PreparedStatement stmt;
     try {
-      String sql = "SELECT * FROM Taxes WHERE date = '" + date.toString() + "' AND username = '" + username + "';";
+      String sql = "SELECT * FROM Taxes WHERE date = \"" + date.toString() + "\" AND username = \"" + username + "\";";
       stmt = connection.prepareStatement(sql);
       ResultSet keyRS = stmt.executeQuery();
       while(keyRS.next()) {

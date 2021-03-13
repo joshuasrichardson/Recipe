@@ -25,7 +25,7 @@ public class IngredientDAO {
    * @throws SQLException
    */
   public void createIngredientInformationTable() throws SQLException {
-    db.createTable("ingredientInformation", "ingredientID", "INTEGER",
+    db.createTable("IngredientInformation", "ingredientID", "INTEGER",
             "ingredientName VARCHAR(255)", "brand VARCHAR(255)",
             "totalAmountBought DOUBLE", "averagePricePerUnit DOUBLE", "salePricePerUnit DOUBLE",
             "mostRecentPricePerUnit DOUBLE", "unit VARCHAR(32)", "foodGroup VARCHAR(255)",
@@ -37,7 +37,7 @@ public class IngredientDAO {
    * @throws SQLException
    */
   public void createIngredientInventoryTable() throws SQLException {
-    db.createTable("ingredientInventory", "ingredientID", "INTEGER",
+    db.createTable("IngredientInventory", "ingredientID", "INTEGER",
             "ingredientName VARCHAR(255)", "brand VARCHAR(255)", "owner VARCHAR(255)",
             "storageContainer VARCHAR(255)", "mostRecentPrice DOUBLE", "number INTEGER", "container VARCHAR(255)",
             "amount DOUBLE", "unit VARCHAR(32)", "purchaseDate VARCHAR(255)", "expirationDate VARCHAR(255)");
@@ -52,7 +52,7 @@ public class IngredientDAO {
   public void addIngredientToInformationTable(Ingredient ingredient) throws SQLException {
     PreparedStatement stmt = null;
     try {
-      String sql = "insert into ingredientInformation (ingredientName, brand, totalAmountBought, " +
+      String sql = "insert into IngredientInformation (ingredientName, brand, totalAmountBought, " +
               "averagePricePerUnit, salePricePerUnit, mostRecentPricePerUnit, unit, foodGroup, cheapestStore, city) " +
               "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -80,7 +80,7 @@ public class IngredientDAO {
   public void addIngredientToInventoryTable(Ingredient ingredient) throws SQLException {
     PreparedStatement stmt = null;
     try {
-      String sql = "insert into ingredientInventory (ingredientName, brand, owner, storageContainer, mostRecentPrice, " +
+      String sql = "insert into IngredientInventory (ingredientName, brand, owner, storageContainer, mostRecentPrice, " +
               "number, container, amount, unit, purchaseDate, expirationDate) " +
               "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -110,9 +110,9 @@ public class IngredientDAO {
     PreparedStatement stmt = null;
     //logger.log(Level.INFO, "Removing " + ingredient.getName());
     try {
-      String sql = "DELETE FROM ingredientInformation " +
-              "WHERE ingredientName = '" + ingredient.getName() + "' AND " +
-              "brand = '" + ingredient.getBrand() + "';";
+      String sql = "DELETE FROM IngredientInformation " +
+              "WHERE ingredientName = \"" + ingredient.getName() + "\" AND " +
+              "brand = \"" + ingredient.getBrand() + "\";";
 
       stmt = connection.prepareStatement(sql);
       stmt.executeUpdate();
@@ -133,10 +133,10 @@ public class IngredientDAO {
     ArrayList<Ingredient> ingredients = new ArrayList<>();
 
     try {
-      ResultSet resultSet = db.accessFromTable("ingredientInformation", "ingredientName", ingredientName);
+      ResultSet resultSet = db.accessFromTable("IngredientInformation", "ingredientName", ingredientName);
       Ingredient ingredient = setIngredientInformation(resultSet);
-      resultSet = db.accessUsingMultipleColumns("ingredientInventory,ingredientName," + ingredientName,
-              "ingredientInventory,owner," + username);
+      resultSet = db.accessUsingMultipleColumns("IngredientInventory,ingredientName," + ingredientName,
+              "IngredientInventory,owner," + username);
       ingredients = setIngredientInventory(ingredient, resultSet);
     }
     catch (SQLException e) {
@@ -154,7 +154,7 @@ public class IngredientDAO {
     Ingredient ingredient = new Ingredient();
 
     try {
-      ResultSet resultSet = db.accessFromTable("ingredientInformation", "ingredientName", ingredientName);
+      ResultSet resultSet = db.accessFromTable("IngredientInformation", "ingredientName", ingredientName);
       ingredient = setIngredientInformation(resultSet);
     }
     catch (SQLException e) {
@@ -250,8 +250,8 @@ public class IngredientDAO {
 
   public Ingredient accessUsingNameAndBrand(String ingredientName, String ingredientBrand) throws SQLException {
     ResultSet resultSet = db.accessUsingMultipleColumns(
-            "ingredientInformation,ingredientName," + ingredientName,
-            "ingredientInformation,brand," + ingredientBrand);
+            "IngredientInformation,ingredientName," + ingredientName,
+            "IngredientInformation,brand," + ingredientBrand);
     return setIngredientInformation(resultSet);
   }
 

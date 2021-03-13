@@ -13,7 +13,8 @@ import java.sql.SQLException;
  */
 public class UserDAO {
 
-  final private Connection connection;
+  private final Connection connection;
+  private final Database db;
 
   /**
    * creates a connection to the user table and updates and retrieves information.
@@ -21,29 +22,18 @@ public class UserDAO {
    */
   public UserDAO(Connection connection) {
     this.connection = connection;
+    this.db = new Database(connection);
   }
 
   /**
    * creates a table that stores information about the user if it doesn't already exist.
    * @return whether a table was created for the current user.
-   * @throws DatabaseAccessException
+   * @throws SQLException
    */
-  public boolean createUserTable() throws DatabaseAccessException {
-    PreparedStatement stmt = null;
-    try {
-      String sql = "CREATE TABLE IF NOT EXISTS User (\n" +
-              "username varchar(255) not null primary key, \n" +
-              "password varchar(255) not null, \n" +
-              "email varchar(255) not null, \n" +
-              "firstName varchar(255) not null, \n" +
-              "lastName varchar(255) not null);";
-      stmt = connection.prepareStatement(sql);
-      stmt.execute();
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new DatabaseAccessException("SQL Error encountered while creating User table");
-    }
-    return true;
+  public void createUserTable() throws SQLException {
+    db.createTable("User", "username", "varchar(255)",
+            "password varchar(255)", "email varchar(255)",
+            "firstName varchar(255)", "lastName varchar(255)");
   }
 
   /**
@@ -81,7 +71,7 @@ public class UserDAO {
     User user = new User();
     PreparedStatement stmt;
     try {
-      String sql = "SELECT * FROM User WHERE " + column + " = '" + value + "';";
+      String sql = "SELECT * FROM User WHERE " + column + " = \"" + value + "\";";
       stmt = connection.prepareStatement(sql);
       ResultSet keyRS = stmt.executeQuery();
       keyRS.next();
@@ -109,7 +99,7 @@ public class UserDAO {
     User user = new User();
     PreparedStatement stmt;
     try {
-      String sql = "SELECT * FROM User WHERE " + column1 + " = '" + value1 + "'\n" +
+      String sql = "SELECT * FROM User WHERE " + column1 + " = \"" + value1 + "\"\n" +
               "\tAND " + column2 + " = '" + value2 + "';";
       stmt = connection.prepareStatement(sql);
       ResultSet keyRS = stmt.executeQuery();

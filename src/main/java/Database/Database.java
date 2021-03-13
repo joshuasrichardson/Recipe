@@ -101,25 +101,32 @@ public class Database {
    */
   public void createTables() {
     try {
-      createTable("recipes", "name", "varchar(255)",
-              "recipeBookAuthor varchar(255)");
-      createTable("recipeBooks", "author", "varchar(255)");
-      createTable("ingredientInformation", "ingredientID", "INTEGER",
+      createTable("Recipe", "name", "varchar(255)",
+              "owner varchar(255)", "servings integer", "description varchar(255)",
+              "instructions varchar(255)", "minutes integer", "temperature integer", "calories integer");
+      createTable("RecipeIngredients", "id", "integer",
+              "recipeName varchar(255)", "ingredient varchar(255)", "amount double", "units varchar(255)");
+      createTable("RecipeAppliance", "id", "integer",
+              "recipeName varchar(255)", "appliance varchar(255)");
+      createTable("RecipeTool", "id", "integer",
+              "recipeName varchar(255)", "tool varchar(255)");
+      //createTable("recipeBooks", "author", "varchar(255)");
+      createTable("IngredientInformation", "ingredientID", "INTEGER",
               "ingredientName VARCHAR(255)", "brand VARCHAR(255)",
               "totalAmountBought DOUBLE", "averagePricePerUnit DOUBLE", "salePricePerUnit DOUBLE",
               "mostRecentPricePerUnit DOUBLE", "amount DOUBLE", "unit VARCHAR(32)",
               "foodGroup VARCHAR(255)", "cheapestStore VARCHAR(255)", "city VARCHAR(255)");
-      createTable("ingredientInventory", "ingredientID", "INTEGER",
+      createTable("IngredientInventory", "ingredientID", "INTEGER",
               "ingredientName VARCHAR(255)", "brand VARCHAR(255)", "owner VARCHAR(255)",
               "storageContainer VARCHAR(255)", "mostRecentPrice DOUBLE", "number INTEGER", "container VARCHAR(255)",
               "amount DOUBLE", "unit VARCHAR(32)", "purchaseDate VARCHAR(255)", "expirationDate VARCHAR(255)");
-      createTable("recipeToIngredients", "id", "integer",
-              "recipeName varchar(255)", "ingredientName varchar(255)", "amount double", "units varchar(255)");
-      createTable("AuthTokens", "authToken", "varchar(255)",
+      createTable("AuthToken", "authToken", "varchar(255)",
               "username varchar(255)");
       createTable("User", "username", "varchar(255)",
               "password varchar(255)", "email varchar(255)",
               "firstName varchar(255)", "lastName varchar(255)");
+      createTable("Taxes", "id", "INTEGER", "username VARCHAR(255)",
+              "store VARCHAR(255)", "taxes DOUBLE", "date VARCHAR(255)");
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -158,7 +165,7 @@ public class Database {
     try {
       String sql = "UPDATE " + table + "\n" +
               "SET " + column + " = \'" + newValue + "\'\n" +
-              "WHERE " + primaryKeyName + " = \'" + name + "\';";
+              "WHERE " + primaryKeyName + " = \"" + name + "\";";
       stmt = connection.prepareStatement(sql);
       stmt.executeUpdate();
     }
@@ -175,7 +182,7 @@ public class Database {
    * @return
    */
   public ResultSet accessFromTable(String table, String column, Object value) throws SQLException {
-    String sql = "SELECT * FROM " + table + " WHERE " + column + " = \'" + value + "\';";
+    String sql = "SELECT * FROM " + table + " WHERE " + column + " = \"" + value + "\";";
     Statement keyStmt = connection.createStatement();
     return keyStmt.executeQuery(sql);
   }
@@ -205,7 +212,7 @@ public class Database {
 
     for (int i = 0; i < columns.size(); ++i) {
       if (i > 0) sql.append(" AND ");
-      sql.append(columns.get(i) + " = \'" + values.get(i) + "\'");
+      sql.append(columns.get(i) + " = \"" + values.get(i) + "\"");
     }
 
     Statement keyStmt = connection.createStatement();
@@ -287,6 +294,10 @@ public class Database {
     clearTable("AuthToken");
     clearTable("IngredientInformation");
     clearTable("IngredientInventory");
+    clearTable("Recipe");
+    clearTable("RecipeIngredients");
+    clearTable("RecipeTool");
+    clearTable("RecipeAppliance");
     clearTable("Taxes");
     return true;
   }

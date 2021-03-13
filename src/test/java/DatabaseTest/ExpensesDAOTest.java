@@ -46,7 +46,7 @@ public class ExpensesDAOTest {
   public void createTaxesTableTest() {
     try {
       expensesDAO.createTaxesTable();
-    } catch (DatabaseAccessException throwables) {
+    } catch (SQLException throwables) {
       fail(throwables.getMessage());
     }
   }

@@ -84,4 +84,8 @@ public class GetHandler {
 
     return nextPart;
   }
+
+  public static String fixInput(String inputToFix) {
+    return inputToFix.replace("%20", " ");
+  }
 }

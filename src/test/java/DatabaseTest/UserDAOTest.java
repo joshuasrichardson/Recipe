@@ -48,7 +48,7 @@ public class UserDAOTest {
   public void createTableTest() {
     try {
       userDao.createUserTable();
-    } catch (DatabaseAccessException e) {
+    } catch (SQLException e) {
       fail(e.getMessage());
     }
   }

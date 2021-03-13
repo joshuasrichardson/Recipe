@@ -31,7 +31,7 @@ public class AuthTokenDAOTest {
       authTokenDAO.createAuthTokenTable();
       authToken = new AuthToken("authtoken", "username");
       authToken2 = new AuthToken("authtoken2", "username2");
-    } catch (SQLException | DatabaseAccessException throwables) {
+    } catch (SQLException throwables) {
       throwables.printStackTrace();
     }
   }

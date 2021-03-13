@@ -12,6 +12,8 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import static Handler.get.GetHandler.fixInput;
+
 public class GetIngredientHandler implements HttpHandler {
   /**
    * handles and returns a single ingredient object in json format.
@@ -20,6 +22,8 @@ public class GetIngredientHandler implements HttpHandler {
    * @return the person object in json format.
    */
   public String handleIngredient(String ingredientName, String authToken) {
+    ingredientName = fixInput(ingredientName);
+
     GetIngredientRequest request = new GetIngredientRequest(ingredientName, authToken);
     GetIngredientService service = new GetIngredientService();
     GetIngredientResult result = service.getIngredient(request);

@@ -11,9 +11,14 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import static Handler.get.GetHandler.fixInput;
+
 public class GetRecipeHandler implements HttpHandler {
 
   public String handleRecipe(String recipeName) {
+    recipeName = fixInput(recipeName);
+    System.out.println(recipeName);
+
     GetRecipeService service = new GetRecipeService();
     GetRecipeResult result = service.getRecipe(recipeName);
 

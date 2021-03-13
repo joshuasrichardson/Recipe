@@ -14,9 +14,9 @@ import static Server.Server.logger;
 
 public class AddIngredientService {
 
-  private String connection;
+  private final String connection;
 
-  Database db = new Database();
+  private final Database db = new Database();
 
   public AddIngredientService() {
     this.connection = CONNECTION_URL;
@@ -36,13 +36,13 @@ public class AddIngredientService {
         IngredientDAO ingredientDAO = new IngredientDAO(db.getConnection(connection));
         ingredientDAO.createIngredientInformationTable();
         ingredientDAO.createIngredientInventoryTable();
-        db.closeConnection(true);
+        //db.closeConnection(true);
 
-        ingredientDAO = new IngredientDAO(db.getConnection(connection));
+        //ingredientDAO = new IngredientDAO(db.getConnection(connection));
         ingredientDAO.removeFromInformationTable(newIngredient);
-        db.closeConnection(true);
+        //db.closeConnection(true);
 
-        ingredientDAO = new IngredientDAO(db.getConnection(connection));
+        //ingredientDAO = new IngredientDAO(db.getConnection(connection));
         ingredientDAO.addIngredientToInformationTable(newIngredient);
         ingredientDAO.addIngredientToInventoryTable(newIngredient);
 

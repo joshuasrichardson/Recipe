@@ -13,6 +13,7 @@ import java.sql.SQLException;
 public class AuthTokenDAO {
 
   private final Connection connection;
+  private final Database db;
 
   /**
    * creates an authToken for a login.
@@ -20,26 +21,17 @@ public class AuthTokenDAO {
    */
   public AuthTokenDAO(Connection connection) {
     this.connection = connection;
+    this.db = new Database(connection);
   }
 
   /**
    * Makes a table for an authToken if it doesn't already exist.
    * @return whether a table was successfully created.
-   * @throws DatabaseAccessException
+   * @throws SQLException
    */
-  public boolean createAuthTokenTable() throws DatabaseAccessException {
-    PreparedStatement stmt = null;
-    try {
-      String sql = "CREATE TABLE IF NOT EXISTS AuthToken (\n" +
-              "authtoken varchar(255) not null primary key, \n" +
-              "username varchar(255) not null);";
-      stmt = connection.prepareStatement(sql);
-      stmt.execute();
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new DatabaseAccessException("SQL Error encountered while creating AuthToken table");
-    }
-    return true;
+  public void createAuthTokenTable() throws SQLException {
+    db.createTable("AuthToken", "authToken", "varchar(255)",
+            "username varchar(255)");
   }
 
   /**
@@ -48,7 +40,7 @@ public class AuthTokenDAO {
    * @return whether the person was added to the table.
    * @throws DatabaseAccessException if the table doesn't exist etc.
    */
-  public boolean addAuthTokenToTable(AuthToken authToken) throws DatabaseAccessException {
+  public void addAuthTokenToTable(AuthToken authToken) throws DatabaseAccessException {
     PreparedStatement stmt = null;
     try {
       String sql = "INSERT INTO AuthToken (authtoken, username) VALUES (?, ?)";
@@ -59,7 +51,6 @@ public class AuthTokenDAO {
     } catch (SQLException e) {
       throw new DatabaseAccessException("SQL Error encountered while inserting into AuthToken table");
     }
-    return true;
   }
 
   /**
@@ -72,7 +63,7 @@ public class AuthTokenDAO {
     AuthToken authToken = new AuthToken();
     PreparedStatement stmt;
     try {
-      String sql = "SELECT * FROM AuthToken WHERE authtoken = '" + authTokenID + "';";
+      String sql = "SELECT * FROM AuthToken WHERE authtoken = \"" + authTokenID + "\";";
       stmt = connection.prepareStatement(sql);
       ResultSet keyRS = stmt.executeQuery();
       keyRS.next();
